@@ -1,0 +1,18 @@
+% !TeX spellcheck = en_US
+This chapter describes a novel \ac{MBS} that offers content-adaptive uploading of media streams.
+Many existing \ac{MBS}s rely on the unadaptive video transmission using \ac{RTMP}, which results in the need for consistently high throughput rates.
+The proposed \acf{LiViU} uses adaptive video streaming to deal with changing network conditions.
+In addition, \ac{LiViU} reacts to changing application requirements and different scenarios by switching mechanisms.
+The term mechanism is derived from the Future Internet project MAKI\footnote{Deutsche Forschungsgemeinschaft Collaborative Research Cluster 1053 on Multi-mechanism Adaptation in the Future Internet (MAKI)}, and specifies single or multiple protocols offering a specific function within a communication network~\cite{Gross2013}.
+In this thesis, the replacement of a running mechanism with another mechanism offering a similar functionality is called mechanism adaptation~\cite{Froemmgen2015}\footnote{According to the terminology of the Future Internet project MAKI, the mechanism adaptations described in this chapter can also be termed as a transition between mechanisms.}.
+Mechanism adaptations are necessary, as \ac{LiViU} has not only to deal with varying network conditions but also heterogeneous streaming scenarios (i.e., remote, in situ and hybrid streaming), and support for different applications.
+The various applications discussed in this thesis are the \ac{PaSC}, which leverages in situ and remote devices for efficient quality assessment of media streams (see Chapter~\ref{chapter:550_scalable_quality_assessment}), and the video composition proposed in Chapter~\ref{chapter:600_videocomposition}.
+By combining the content and mechanism adaptation, \ac{LiViU} better copes with unsteady, resource-capped networks and changing application requirements.
+
+Mechanisms used in \ac{LiViU} are selected based on a study of different upload protocols.
+To  select the most beneficial mechanisms, simulative studies with state-of-the-art \ac{MBS}s are performed.
+It is shown that existing mechanisms have different strengths as well as weaknesses depending on the environmental conditions.
+The strengths of different mechanisms influence the design of \ac{LiViU}, that can dynamically adapt between mechanisms to not only allow a high bit rate, but also a low delay in streaming.
+A prototype on the Android \ac{OS} is proposed and evaluated, which combines mechanism and content adaptation.
+
+Concepts and ideas discussed in this chapter revise the peer-reviewed publications~\cite{Stohr2016,Wilk2014c,Wilk2016f,Wilk2015d}.

@@ -1,0 +1,38 @@
+% !TeX spellcheck = en_US
+\section{Recap on HTTP Adaptive Streaming (HAS)}
+\label{sec:715_has}
+The proposed \ac{VAS} system is designed to support the predominant video streaming protocol reaching peaks of up to 29.7\% of United States of America's downlink traffic: \acf{HAS}~\cite{Adhikari2012}.
+Protocols, such as \ac{HLS} or \ac{MPEG} \ac{DASH}, belong to \ac{HAS} and have in common that the same video is available in different quality version.
+Clients can switch between the different quality version during a streaming session at well-defined adaptation points.
+This is possible as \ac{HAS} systems rely on \ac{HTTP} for streaming video.
+Thus, streaming clients regularly request chunks of a video stream via \ac{HTTP} GET requests and get as payload of the server's response the video data.
+Thus, all \ac{HAS} protocols rely on the reliable and ordered \ac{TCP}-based transmission.
+In addition, \ac{HAS} clients have in common, that they leverage a playback buffer. 
+Multiple chunks of video are stored before playback begins to achieve a stable and continuous playback of the video streams.
+%Protocol developers can choose the desired size of the playback buffer. 
+%The aim of nearly all protocols is to keep the playback buffer fill rate close to 100\%.
+%Thus, the video playback is artificially delayed by a  seconds.
+
+The most prominent and promising example for \ac{HAS} is the \ac{MPEG} standard \ac{DASH}. %, as it is vendor-independent and supported by major industry players such as Akamai, Google or Netflix.
+\ac{DASH}~\cite{Stockhammer2011} standardizes the protocols for network communication of an adaptive video streaming system as well as the description of the different video qualities.  
+Different video representations are encoded with different target bitrates.
+The bitrates of the representations are stable over the course of the video, e.g., Apple requires that the variance is below 25\% for the latest Apple TV~\cite{Apple2016}.
+For compatibility with mobile devices a constant bitrate or a maximum variance of 10\% is recommended~\cite{Apple2016}.  
+The representations of a video are stored independent of each other and then split into segments of equal duration.
+It is assumed, that with increasing bitrate of a \ac{DASH} representation the perceived quality of the video increases.
+The segment durations determine the intervals when client's can adapt the video quality.
+Segment durations usually range between two and thirty seconds. 
+A web server can be used for the distribution of the video segments, as the clients pull them using \ac{HTTP}. 
+\ac{DASH} uses a manifest for describing segments of the video and different quality representations. 
+The manifest eases the selection of the appropriate representation by including meta data such as the resolution, bitrate and frame rate of the related video. 
+Depending on the network conditions the client decides at runtime to increase or decrease quality by selecting the next segment accordingly. 
+%Available adaptation schemes can be classified into throughput-based, buffer-based and hybrid ones.
+%Throughput-based adaptation schemes the representation is chosen so that its bitrate is close but below the current application layer throughput.
+
+Bitrates of a representation are affected by the video resolution, the signal-to-noise level (or the target quantization) and the frame rate of the video. 
+In most cases, DASH clients rely on adaptation logics which consider the application layer throughput, the current buffer fill rate or combine both metrics for selecting the representation to be streamed~\cite{Thang2014}.
+%Recent research~\cite{Huang2014} has shown that playback buffer-based or hybrid method perform best and avoid too frequent oscillations, which can become degrading for the watching experience. 
+%Note, that most existing implementations neglect different frame rates, as players are not capable to switch during the run-time~\footnote{Examples of implementations which do \emph{not} support frame rate adaptation include the libDASH~\url{https://github.com/bitmovin/libdash}, JWPlayer~\url{https://github.com/jwplayer/jwplayer} or Shaka-Player~\url{https://github.com/google/shaka-player}. For our experiments we leverage the DASH IF reference implementation client DASH.js~\url{https://github.com/Dash-Industry-Forum/dash.js/}, which offer frame rate adaptation.}.
+
+That the video content can help to adapt in a data traffic saving manner is neglected by current \ac{HAS} systems.
+The proposed \ac{VAS} introduces content-aware adaptation for \ac{VAS}, which saves data and improves the video streaming experience. 

@@ -1,0 +1,20 @@
+% !TeX spellcheck = en_US
+This chapter introduces the \ac{VAS}, a support service for video streaming sessions, which considers both network and content characteristics of a video to improve the streaming quality and reduce the generated data traffic.
+By adding content-awareness to adaptive video streaming, \ac{VAS} can achieve a better understanding on what is encoded in a streamed video, and which bit rate is necessary to achieve high quality for the user.
+
+The contributions of \ac{VAS} are two-fold.
+First, the system introduces adaptation support methods for content-aware video adaptation that are specifically designed for mobile devices.
+Current adaptation schemes are limited to a network-aware adaption - neglecting video content characteristics.
+\ac{VAS}'s adaptation schemes ensure a consistent quality level over long streaming sessions at lower bit rates than network-based adaptation schemes.
+They achieve this as in many situations higher bit rate representations do not offer perceived quality gains.
+It is shown that \ac{VAS} is most beneficial for mobile streaming sessions which are executed in mobile networks.
+Cellular network users are usually bound to data-capped volume contracts, which allow them to access the Internet at high speeds for a limited amount of traffic per month.
+Users are interested in saving data traffic without sacrificing video quality.
+
+Besides new adaptation schemes, \ac{VAS} introduces a scheme that can easily categorize video content according to structural, temporal and color characteristics, enabling \ac{VAS} to react quickly to changing content.
+\ac{VAS} is suited for both \ac{VoD} and live video streaming scenarios.
+The live streaming support is required for videos delivered by \ac{LiViU} and video composition systems like CrowdCompose and AutoCompose.
+It is shown that this classification correlates well with subjective impressions of different video quality levels.
+
+The description of the \ac{VAS} revises our peer-reviewed publications~\cite{Wilk2016c,Wilk2016b,Wilk2015}.
+Also, we co-authored the quality assessment framework \ac{RT-VQM} mentioned in this chapter~\cite{Wichtlhuber2016}.

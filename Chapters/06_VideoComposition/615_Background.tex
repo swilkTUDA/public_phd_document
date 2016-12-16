@@ -1,0 +1,40 @@
+% !TeX spellcheck = en_US
+\section{Concept of the Proposed Video Composition}
+\label{sec:615_concept}
+Automatic video composition aims at creating a single video stream (called composed video) from the abundance of a scene recorded in different video recordings.
+The composed video includes the most desirable video segments from different recordings~\cite{Shrestha2010}.
+Figure~\ref{fig:615_conceptvideocomposition} shows the automatic video composition and discusses the two central questions which are answered in a video composition:
+\begin{enumerate}
+	\item Which video view will be selected next for the composed video?
+	\item When will a switch from one view to another be executed?
+\end{enumerate}
+\begin{figure}[tbh]
+\centering
+\includegraphics[width=\linewidth]{gfx/600_Composition/Concept_Video_Composition}
+\caption[Tasks of automatic video composition algorithms]{Tasks of automatic video composition algorithms to receive several in-parallel recorded video streams and select one at any given moment for the output.}
+\label{fig:615_conceptvideocomposition}
+\end{figure}
+The first question addresses a point that the composition application has to understand what kind of a scene is recorded, and select the next appropriate video view.
+This also includes that the continuity of the composed video shall not be broken. 
+The second question discusses that a switch from one view to another is placed in a manner to not degrade the viewing experience or distract viewers.
+Answers to these questions have to be given for live video streams in real-time and to scale automatically with the increasing amount of \ac{UGV}.
+
+In Section~\ref{sec:240_quality_composition}, we discussed how quality is perceived in composed videos.
+It is commonly agreed that a composed video can achieve a higher perceived quality in comparison to a single video view.
+Video composition needs to consider the concepts of event coverage, event continuity, the quality-aware selection of video views, the diversity of the selection and cinematographic rules.
+This chapter discusses these aspects in three different modules: 1) Filter stage, 2) CrowdCompose and 3) AutoCompose.
+
+The \emph{filter stage} preselects videos that should be considered for composition.
+Not considered are video views at a given point in time that either suffer from a significantly degraded quality or conflict with a cinematographic rule.
+
+\emph{CrowdCompose} is a semi-automatic composition application, which is explained in Section~\ref{sec:620_System_Architecture}.
+It is a semi-automatic approach, as a group of humans make composition decisions, i.e., which view will be selected next and when to switch to it.
+To enable a cost-efficient and especially quick decision making - complying with real-time constraints - crowdsourcing is chosen as a paradigm.
+In this context, crowdsourcing implies the design of small and well-defined tasks that can be completed in a short time by a wide range of remote users. 
+Tasks are provisioned to an anonymous group of people using a mediating web platform, and users are compensated for completing the tasks by micropayments.
+The results of CrowdCompose are a composed live video stream and models that can later be used by AutoCompose to "learn" human directing styles.
+
+\emph{AutoCompose} learns the composition model proposed by CrowdCompose and thus mimics human composition styles.
+As video composition relies on an understanding of the decisions in a temporal dimension, i.e., current and previously selected views determine which view is selected next, a sequence-tagging machine learning algorithm relying on the \ac{SVM-HMM} is used.
+It conducts video compositions completely free of any human interaction.
+CrowdCompose and AutoCompose are interchangeable modules, where only one is used at a time.

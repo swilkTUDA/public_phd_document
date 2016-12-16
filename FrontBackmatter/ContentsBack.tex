@@ -1,0 +1,59 @@
+%*******************************************************
+% List of Figures and of the Tables
+%*******************************************************
+
+\begingroup 
+    \let\cleardoublepage\relax
+    \let\cleardoublepage\relax
+    
+% \begin{otherlanguage}{american}
+    %*******************************************************
+    % List of Figures
+    %*******************************************************    
+    %\phantomsection 
+    \refstepcounter{dummy}
+    \addcontentsline{toc}{chapter}{\tocEntry{\listfigurename}}
+    %\pdfbookmark[1]{\listfigurename}{lof}
+    \markboth{\spacedlowsmallcaps{\listfigurename}}{\spacedlowsmallcaps{\listfigurename}}
+    \listoffigures
+
+%    \vspace*{8ex}
+    \newpage
+
+    %*******************************************************
+    % List of Tables
+    %*******************************************************
+    %\phantomsection 
+    \refstepcounter{dummy}
+    \addcontentsline{toc}{chapter}{\tocEntry{\listtablename}}
+    %\pdfbookmark[1]{\listtablename}{lot}
+    \markboth{\spacedlowsmallcaps{\listtablename}}{\spacedlowsmallcaps{\listtablename}}
+    \listoftables
+        
+%    \vspace*{8ex}
+    \newpage
+    
+    %*******************************************************
+    % List of Listings
+    %*******************************************************      
+%	  %\phantomsection 
+%    \refstepcounter{dummy}
+%    \addcontentsline{toc}{chapter}{\lstlistlistingname}
+%    %\pdfbookmark[1]{\lstlistlistingname}{lol}
+%    \lstlistoflistings 
+
+%    \vspace*{8ex}
+    \newpage    
+           
+    %*******************************************************
+    % Acronyms
+    %*******************************************************
+    %\phantomsection 
+    \refstepcounter{dummy}
+    \addcontentsline{toc}{chapter}{\tocEntry{List of Acronyms}}
+    %\pdfbookmark[1]{Acronyms}{acronyms}
+    \markboth{\spacedlowsmallcaps{List of Acronyms}}{\spacedlowsmallcaps{List of Acronyms}}
+    \chapter*{List of Acronyms}
+    \input{FrontBackmatter/Acronyms}
+        
+% \end{otherlanguage}                

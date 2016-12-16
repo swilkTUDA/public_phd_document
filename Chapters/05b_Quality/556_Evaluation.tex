@@ -1,0 +1,280 @@
+% !TeX spellcheck = en_US
+\section{Setup of the Evaluation}
+\label{sec:556_recording_intro}
+The analysis of the precision and runtime behavior of the novel quality assessment algorithms (Section~\ref{sec:556_RQA_Eval}) is split from the analysis of the \ac{PaSC} (Section~\ref{556:Assessment_Eval}).
+\subsection{Recording Quality Assessment}
+\label{sec:556_RQA_Eval}
+\subsubsection{Evaluation Setup for the Recording Quality Assessment Algorithms}
+The evaluation executes recording quality assessment algorithms and compares them on different, publicly available video datasets in comparison to state-of-the-art algorithms.
+Furthermore, results are given regarding the reliability of the quality assessment prediction and its runtime.
+Metrics are introduced depicting these attributes.
+The algorithms have been evaluated on an Intel Xeon CPU E5-1650 with 64 GB of dedicated memory, without \ac{GPU} support.
+\paragraph{Video Datasets}
+\label{sec:556_eva_dataset}
+For assessing the proposed algorithms detecting camera shakes, harmful occlusions and camera misalignments datasets are used that contain \ac{UGV} and auxiliary sensor data including gyroscope, accelerometer, and location samples.
+
+The CMDG dataset~\cite{Bano2015} contains 24 \ac{UGV}s with a total duration of $70$ minutes at a resolution of $480p$ up to $1080p$, and a frame rate of $23$ \ac{FPS} at different brightness levels.  
+Videos are annotated by synchronized samples of the gyroscope, \ac{GPS}, and accelerometer sensors.
+The dataset contains a manually annotated ground truth for camera shake detection, but lacks annotations on harmful occlusions or camera misalignments.
+  
+The second public dataset used for evaluation is called JIKU, provided by Saini et al.~\cite{Saini2012}.
+The dataset contains \ac{UGV}s from ten smartphones with 66 video clips and a total duration of $343$ minutes.
+Four recordings have a resolution of $480p$, whereas the remaining videos have a resolution of $720p$ at a frame rate of 25 \ac{FPS}. 
+The videos are annotated by readings from the sensors compass and accelerometer.  
+A ground truth had to be created for the recording degradations of camera shake, occlusion, and camera misalignment.
+
+For the parameter study and the evaluation, one additional video dataset was created that consisted of 18 \ac{UGV}s - including high and low brightness frames. 
+Nine videos were recorded at a resolution of \ac{480p} by a Nexus 5 and annotated by the accelerometer, location or gyroscope samples.
+Nine additional videos have a resolution of \ac{720p} and a duration between $1-2$ minutes at a frame rate of 29 \ac{FPS}. 
+The ground truth is manually annotated for camera shake, occlusion and camera misalignment.
+The recordings in this dataset were purposely created for algorithms to easily find degradations. 
+Also, the recordings lack other degradations such as compression artifacts or rapid motion of objects. 
+In the remaining evaluation, this dataset is called UGVD.
+\paragraph{Evaluation Metrics}
+\label{sec:556_eva_metrics} 
+Metrics used in the evaluation describe the runtime of the algorithms and their ability to reliably detect a specific degradation.
+
+The total time of computation for a hybrid algorithm is as follows:
+\begin{equation}\label{eq:556_run-time} 
+  t_{AL}{= } t_{AD} + t_{AS} + t_{V} \qquad [\unit{s}]
+\end{equation}
+$t_{AL}$ depicts the entire runtime in $\unit{seconds}$ for an algorithm, where $t_{AD}$ depicts the time necessary for making an adaptation decision in hybrid algorithms, $t_{AS}$ the runtime of the auxiliary sensor-based analysis, and $t_{V}$ the video-based processing part.
+If an algorithm is evaluated that solely uses video as input, $t_{AD} = 0$ and $t_{AS} = 0$.
+Derived from the runtime of an algorithm, real-time suitability is calculated as a fraction of $t_{AL}$ in respect of the video duration: $RTS=\frac{t_{AL}}{D_{V}}$.
+
+To determine the precision of algorithms, standard metrics are used that compare the quality assessment result with the ground truth for each dataset.
+Based on this comparison, the numbers of true positive ($TP$), false positive ($FP$), true negatives ($TN$), and false negative ($FN$) detections are calculated.
+As a result, the metrics of precision, accuracy, recall, and the F1-score are used.	
+The precision depicts the rate of truly detected degradations of an algorithm in relation to the total number of detections in a video: $P= \frac{TP}{TP + FP}$.
+Recall is the number of true detections made by the algorithm in relation to true positives and degradations missed by the algorithm, which can be described as
+$R = \frac{TP}{TP + FN}$.
+Thus, the precision depicts how many degradations were found in a video that are not degrading the quality as annotated in the ground truth of the dataset; the recall describes the missed degradations.
+Both concepts are fused in a single metric, the F1-score as $F1= 2 \times \frac{P \times R}{P + R}$.
+\subsubsection{Parameter Study}
+\label{sec:556_parameters}
+In a first step of the evaluation, the algorithms' parameters are determined which achieve the highest F1-score, thus performing best.
+The parameters determined are used in the remaining evaluation.
+
+The study was performed on a seven video subset of the JIKU dataset\footnote{All videos are from the event NAF\_160312.}. 
+Also, due to the absence of light sensor values in the JIKU dataset, a subset of videos from the CMDG dataset is selected\footnote{A total of four videos from events \textit{2\_VilanovaRambla} and \textit{3\_MiniTrain}} for empirical studies. 
+\paragraph{Parameters for Camera Shake Assessment}
+Table~\ref{tab:556_cs} gives an overview of the parameters evaluated for camera shake assessment.
+It includes both video-based and auxiliary sensor-based (linear accelerometer) parameters. 
+Values annotated by an * give the optimal F1 score.
+\begin{table}[!htb]
+	\centering
+	\begin{tabular}{lp{5.5cm}cc}
+		\toprule
+		\textbf{Parameter} & \textbf{Description}                            & \textbf{Unit}         & \textbf{\specialcell{Parameter\\ Variations}}            	 \\
+		\midrule
+		\multicolumn{4}{l}{Adaptation}\\
+		\midrule
+		$T_{L,N5}$ & Device-specific luma threshold $T_{L,D}$ for LG Nexus 5 ($N5$). & $lux$  & 1.0, \textbf{2.0*}, 3.0, 4.0, 5.0          \\
+		$T_{L,S2}$ & Device-specific luma threshold $T_{L,D}$ for Samsung Galaxy S2 ($S2$).                                                &             $lux$          & 50.0, 55.0, \textbf{100.0*}, 150.0           \\
+		$T_{L,V}$    & Video-based algorithm to distinguish low from high brightness video segments.    & -                  & 45, \textbf{50*}, 55, 60, 65           \\
+		\midrule
+			\multicolumn{4}{l}{Camera Shake Assessment}\\
+		$\alpha$   & Low-pass filter cut-off threshold for camera shake detection using the linear accelerometer. 	      & -               & 0.1, 0.2, \textbf{0.3*}, 0.4      \\
+		$T_{S,V}$   & Video-based algorithm threshold for detection camera shakes.      & -                  & 0.06, 0.10, \textbf{0.14*}, 0.18, 0.22      \\
+		$T_{S,AS}$ & Threshold for auxiliary sensor-based camera shake detection algorithms.     & $\frac{\unit{m}}{s^2}$ 			  & 0.1, \textbf{0.2*}, 0.4, 0.6, 0.8, 1.0       \\
+		$T_{lowGray}$   & Threshold for detecting low gray intensity values in the video-based camera shake detection.    & -                  & 30 - 126 (in steps of 4) \textbf{98*} \\
+		\midrule
+		\multicolumn{4}{l}{Harmful Occlusion Assessment}\\
+		$T_{ED}$ & Edge density for a subblock needs to be lower than the reference models edge density minus this threshold.     & none & 0.1, 0.3, \textbf{0.4}*, 0.5      \\
+		\midrule
+		\multicolumn{4}{l}{Camera Misalignment Assessment}\\
+		$T_{CM,AS}$ & Degradation score threshold for rotation detection & ° & 0, 5, 15, \textbf{25}*, 35, 55, 75     \\
+		\bottomrule
+	\end{tabular}
+	\caption[Parameter study for recording quality assessment algorithms.]{Parameter study for the proposed camera shake, harmful occlusion, and camera misalignment algorithms, including thresholds for auxiliary sensor-based and video-based algorithms. * depicts the parameter configuration which achieved the highest F1-score.}
+	\label{tab:556_cs}
+\end{table}
+
+$T_{L,D}$ and $T_{L,V}$ are used as thresholds for the adaptation of the camera shake algorithm based on both the smartphone's light sensor and video-based processing. 
+$T_{L,N5}$ and $T_{L,S2}$ are device specific thresholds for the Nexus 5 and Samsung S2 respectively. %, varying from different manufacturers. 
+
+Different values were tested, as stated in Table~\ref{tab:556_cs}. 
+It was empirically determined that the low brightness values are $T_{L,N5}=2.0$ and $T_{L,S2}= 100.0$ and thus very different for different devices.
+As a fallback solution, $T_{L,V}$, is the luma intensity threshold for pixels which we have empirically determined to be equal to $50$.
+It is used, when no light sensor data is available.
+
+For determining whether a camera shake is present or not the thresholds $T_{S,V}$ and $T_{S,AS}$ are introduced.
+The threshold $T_{S,V}$ is responsible for classifying imperceivable and perceivable shakes in the video-based algorithm.
+Thresholds range from $[0,1]$.
+From enumerating the parameter values, the highest F1-score could be achieved at a threshold of $T_{S,V}=0.14$.
+For the auxiliary sensor-based camera shake assessment, the linear acceleration values are used. Small values detected by this sensor are due to unintended movements, but do not significantly degrade the perceived quality.
+The respective threshold $T_{S,AS} = 0.2$ achieves the most precise and reliable detection of camera shakes.
+%%%%%%%%%%%%%Harmful occlusion paramter study%%%%%%%%%%%%%%%%%
+\paragraph{Parameters for Harmful Occlusion Detection}
+%% Table for paramter study occlusion detection%
+The adaptation used for camera shake assessment is also applied to the harmful occlusion algorithm selection ($T_{L,D}$). 
+Whereas the tracking-based harmful occlusion assessment algorithm detects the harmful occlusions without any adjustable parameters, the threshold $T_{ED}$  is relevant for edge density-based occlusion detection.
+In reference to a previously determined value for the edge density in a subblock of a frame, this threshold gives a safety corridor in which  varying edge densities do not indicate a harmful occlusion.
+The variations studied are detailed in Table~\ref{tab:556_cs}. 
+The highest F1-score could be achieved for a threshold of $0.4$.
+\paragraph{Parameters for Camera Misalignment Detection}
+\label{sec:556_paramCo}
+Smaller tilts will not significantly degrade the user experience when watching the video.
+Thus, the threshold $T_{CM,AS}$ depicts a barrier, which classifies if a tilt is disturbing or not.
+From the parameter study, a tilt of $25\degree$ and above is classified as a camera misalignment which degrades the experience.
+%=============================================================================
+%=============================================================================
+\subsubsection{Evaluating the Camera Shake Assessment}
+The evaluation of the camera shake assessment consists not only of the proposed algorithms, but also of state-of-the-art algorithms for comparison.
+After the introduction of the algorithms, the performance is assessed regarding the F1-score and runtime.
+\paragraph{Evaluated Algorithms}
+The proposed algorithms for camera shake assessment are abbreviated as $CS_{V}$ for the video-based, $CS_{AS}$ for auxiliary sensor-based, and $CS_{Hybrid}$ for the proposed hybrid camera shake assessment algorithm.
+In addition, related approaches of Campanella et al.~\cite{Campanella2007}, Saini et al.~\cite{Saini2012}, Bano et al.~\cite{Bano2015} are used in the comparison. 
+\paragraph{F1-Score of the Algorithms}
+\begin{table}[!htb]
+	\centering
+	\begin{tabular}{lcccccccccccc}
+		\toprule
+			& \multicolumn{4}{c}{\textit{CMDG}} & \multicolumn{4}{c}{\textit{JIKU}} & \multicolumn{4}{c}{\textit{UGVD}}  \\
+				\cmidrule(lr){2-5}
+				\cmidrule(lr){6-9}
+				\cmidrule(lr){10-13}
+		Algorithm & P & R & F1 & RTS & P & R & F1 & RTS & P & R & F1 & RTS  \\
+		\midrule
+		$CS_{Campa.}$ & 0.11 & 0.82 & 0.193 & 0.905& 0.92 & 0.93 & 0.924 & 0.536 & 0.03& 0.777 & 0.057 & 0.3131\\
+		$CS_{Saini}$ & 0.1 & 0.7 & 0.175 &  0.904 & 0.92 & 0.81 & 0.861 &0.534 & 0.29 & 0.77 & 0.055 & 0.31 \\
+		$CS_{Bano}$ & 0.41 & 0.57 & 0.477 &0.0002 & $\circ$&$\circ$ & $\circ$ & $\circ$ &0.117 & 0.285 & 0.166 &0.0002 \\
+	%	$CS_{Cricri}$ & & & & & & & & & & & & \\
+		\midrule
+		$CS_{V}$ & 0.2631 & 0.3061 & 0.282 & 0.96 & 0.923 & 0.969& 0.946 & 0.6363 &0.59 &0.601 & 0.595 & 0.31 \\
+		$CS_{AS}$ & 0.53 & 0.73 & 0.616 & 0.0001 & 0.93 & 0.8378 & 0.881 & 0.0002 & 1 & 1 &  1 & 0.0001 \\
+		$CS_{Hybrid}$ & 0.53 & 0.73 & 0.614 & 0.48 & 0.92 & 0.99 & 0.9537 & 0.317 & 1.0 & 1.0 & 1.0  & 0.156 \\ % 0.4805 = 0.961/2 / 0.31785 = 0.6357 / 2  / 0.1562 = 0.3124 /2
+		\bottomrule
+		\end{tabular}
+		\caption[Evaluation results for camera shake algorithms]{Camera shake assessment results regarding precision (P), recall (R), F1-score (F1) and the runtime regarding the quota of duration of the assessment in relation to the duration of the dataset. This is called real-time suitability (RTS), where a value below 1 indicates a real-time calculation.}
+		\label{tab:556_eval_camera_shake_table}
+\end{table}
+The results of the evaluation are depicted in Table~\ref{tab:556_eval_camera_shake_table}.
+The table describes different versions of the proposed algorithm using single sensor input ($CS_{V}$ and $CS_{AS}$) and the hybrid algorithm ($CS_{Hybrid}$).
+From the three different datasets, it is obvious that the adaptive, hybrid algorithm leads to improved precision as well as recall - thus,  generating the highest F1-score. 
+For UGVD, the $CS_{AS}$ already achieves an F1-score of 1.0, which is met by $CS_{Hybrid}$. 
+In all other datasets, the dynamic switching between video-based and auxiliary sensor-based search for camera shakes results in a more reliable detection. 
+At the same time, the algorithms achieve a higher precision and recall compared to the related approaches.
+The only exception is the video-based algorithm ($CS_{V}$) and Bano et al.'s approach~\cite{Bano2015}, called $CS_{Bano}$ for the CMDG dataset. 
+
+For the CMDG dataset, it can be observed that the higher F1-scores of the proposed algorithms $CS_{AS}$ and $CS_{Hybrid}$ are achieved by increased precision, while keeping a similar recall rate as the related work ($CS_{Saini}$).
+For the JIKU dataset, the precision of all algorithms is at a similar level: between 0.92 and 0.93.
+The recall rates of the proposed hybrid algorithm are close to 1 when combining the video-based and auxiliary sensor-based algorithms, reducing false hits. Consequently, the F1-score is close to 1.
+Here, the gyroscope-based algorithm $CS_{Bano}$ outperforms the proposed video-based algorithm, as the dataset was constructed during the development of CMDG.
+The scenes recorded for this dataset suffer from bad lighting conditions and rapid, non-camera shake motion. 
+The gyroscope recordings have been perfectly synchronized with the video.  
+This brings us to the conclusion that such an algorithm will perform significantly worse in imperfect scenarios.
+As a result, the performance of $CS_{Bano}$ degrades in comparison to the proposed algorithms for the UGVD dataset. 
+The devices that recorded the JIKU dataset did not offer gyroscope sensings. 
+
+The remaining and competing video-based algorithms lack precision, and show a higher runtime in comparison to the proposed algorithm.
+In conclusion, the hybrid algorithm offers the highest potential to reliably detect camera shakes, as it can rely on a fast and precise auxiliary sensor-based algorithm; when lacking such input, the hybrid algorithm can apply a sophisticated video-based algorithm instead.
+\paragraph{Runtime of the Algorithms}
+The runtime of the algorithms is depicted in Table~\ref{tab:556_eval_camera_shake_table}.
+It shows that the purely auxiliary sensor-based algorithms $CS_{Bano}$ and $CS_{AS}$ show a high correlation and achieve a low runtime. 
+Here, the approach by Bano et al.~\cite{Bano2015} outperforms all proposals, but if not all recording devices (e.g., older smartphones) have a gyroscope no calculation is possible.
+The hybrid algorithm builds a good trade-off, as it offers the ability to achieve an $RTS$ (real-time suitability) between 0.3124 and 0.65, where a lower value is more favorable.
+% -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - --
+\subsubsection{Evaluating the Harmful Occlusion Assessment}
+Harmful occlusion detection and assessment are introduced in Section~\ref{sec:554_QA_Harmful_Occlusion} and is evaluated in comparison to related video-based algorithms.
+\paragraph{Evaluated Algorithms}
+As discussed in the related work chapter (Chapter~\ref{chapter:200_Background}), some harmful occlusion detection algorithms exist, especially in the area of object tracking. 
+No existing algorithm quantifies the impact on the subjective perception of a video.
+The proposed hybrid algorithm, which is discussed in Section~\ref{sec:554_QA_Harmful_Occlusion}, is termed $HO_{Hybrid}$.
+The approach by Saini et al.~\cite{Saini2012} is termed $HO_{Saini}$.
+This algorithm analyzes each video frame in an edge representation and classifies parts of the video frame as occluded if the edge density decreases.
+
+Also, the approach of Saravanakumar et al.~\cite{Saravanakumar2012} is used for comparison ($HO_{Sarav}$).
+As discussed above, they apply a continuous contour-tracking-based approach for the detection of harmful occlusions.
+It removes shadows and background information to reliably detect and track objects.
+\paragraph{F1-Score of the Algorithms}
+\begin{table}[htb]
+	\centering
+	\begin{tabular}{lcccccccccccc}
+		\toprule
+		& \multicolumn{4}{c}{\textit{CMDG}} & \multicolumn{4}{c}{\textit{JIKU}} & \multicolumn{4}{c}{\textit{UGVD}}  \\
+			\cmidrule(lr){2-5}
+			\cmidrule(lr){6-9}
+			\cmidrule(lr){10-13}
+		Algorithm & P & R & F1 & RTS & P & R & F1 & RTS & P & R & F1 & RTS  \\
+		\midrule
+		$HO_{Saini}$ & 0.471 & 0.053 & 0.096 & 11.25 & 0.614 & 1 & 0.76 & 1.324 & 0.521& 0.335 & 0.408 & 0.382 \\
+		$HO_{Sarav}$ & 0.222 & 0.145 & 0.175 & 1.012 & 0.121 & 0.6787 & 0.205 & 0.2981 & 1 & 0.1787 & 0.303 & 0.433\\
+		\midrule
+		$HO_{Hybrid}$ & 0.88 & 0.988 & 0.931 & 0.942 & 0.615 & 1.0 & 0.762 & 0.6644 & 0.74& 0.6& 0.662 & 0.347 \\
+	
+		\bottomrule
+	\end{tabular}
+	\caption[Evaluation results for harmful occlusion detection algorithms.]{Harmful occlusion assessment results regarding precision (P), recall (R), F1-score (F1), and the runtime regarding the quota of duration of the assessment in relation to the duration of the dataset called real-time suitability (RTS), where a value below 1 indicates a real-time calculation.}
+	\label{tab:556_eval_harmful_occlusion_table}
+\end{table}
+In contrast to the other degradations, the harmful occlusion assessment solely relies on video as input. Related approaches regarding harmful occlusion detection act similarly to the proposed approach, analyzing either object movements or the loss of edge density. 
+The proposed approach dynamically adapts between different video-based algorithms and increases their robustness against brightness changes and badly illuminated videos, which are common in today's \ac{UGV} datasets.
+
+For the CMDG dataset, the proposed hybrid algorithm outperforms the related approaches, both regarding precision and recall rate. 
+In this context, the proposed algorithm handles such situations better. 
+It outperforms all other approaches in the CMDG dataset. 
+These advantages decrease when the JIKU dataset or the UGVD dataset is considered. 
+For the JIKU dataset, there is an advantage compared to the algorithm $HO_{Saini}$, both regarding precision and recall.
+For the novel UGVD dataset, the tracking-based algorithm $HO_{Sarav}$ outperforms the other algorithms regarding precision.
+The reason is that in comparison to the other datasets, no camera motion such as panning or tilting disturbs the object tracking.
+The algorithm wrongly classifies contour losses as harmful occlusions.
+
+In the evaluated datasets, the proposed hybrid algorithm achieves F1-scores between 0.66 and 0.762 and still outperforms Saini et al.'s approach in their JIKU dataset.
+Especially, the recall rates in the JIKU dataset reach up to 1.0. 
+\paragraph{Runtime of the Algorithms}
+The tracking-based approach, as proposed in $HO_{Sarav}$ or in $HO_{Hybrid}$, require higher processing times in comparison with edge density-based approaches.
+The proposed hybrid algorithm extends from the ideas of $HO_{Sarav}$ and $HO_{Saini}$. It improves precision and omits unnecessary steps which reduces the runtime.
+It favors rapid processing of the quality assessment.  
+As a result, the hybrid algorithm always achieves real-time processing of the content.
+In the presence of 480p and 1080p content as in the CMDG dataset, it is the only algorithm that falls below the RTS of 1.
+For the remaining, low-resolution datasets, processing time is lower. 
+In general, one could say that the differences between the hybrid algorithm $HO_{Hybrid}$ and $HO_{Sarav}$ are nearly imperceivable in all cases - but the precision of the proposed algorithm is higher.
+% -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - --
+\subsubsection{Evaluating the Camera Misalignment Assessment}
+Camera misalignment is classified into the quick detection of camera tilts and the detection of a collaboratively sensed \ac{RoI} captured in a scene.
+Related algorithms are introduced and compared with the proposed algorithms.
+\paragraph{Evaluated Algorithms}
+For camera misalignment assessment, a video-based $CM_{V}$, auxiliary sensor-based $CM_{AS}$, and hybrid algorithm $CM_{H}$ are proposed.
+The tilt detection algorithm integrated into the Android \ac{OS} is evaluated, too.
+It leverages accelerometer values and determines a tilt if one of the axes of the accelerometer indicates a turn of at least $25\degree$.
+This algorithm is termed $CM_{AD}$.
+
+Furthermore, the algorithm for tilt detection introduced by Saini et al.~\cite{Saini2012} is evaluated.
+It analyzes video frames for their horizontal alignment, and acts similar to our approach analyzing the edge orientation ($CM_{Saini}$).
+\paragraph{F1-Score of the Algorithms}
+\begin{table}[htb]
+	\centering
+	\begin{tabular}{lcccccccccccc}
+		\toprule
+		& \multicolumn{4}{c}{\textit{CMDG}} & \multicolumn{4}{c}{\textit{JIKU}} & \multicolumn{4}{c}{\textit{UGVD}}  \\
+		\cmidrule(lr){2-5}
+		\cmidrule(lr){6-9}
+		\cmidrule(lr){10-13}
+		Algorithm & P & R & F1 & RTS & P & R & F1 & RTS & P & R & F1 & RTS  \\
+		\midrule
+		$CM_{AD}$ & 0.12 & 0.35 & 0.178 & 0.00002 & 0.0538& 0.7783& 0.1 & 0.00002 &0.016 & 0.177& 0.029 &0.00002 \\
+		$CM_{Saini}$ & $\circ$ & $\circ$ & $\circ$ & 0.9525 &0.584 & 0.103 & 0.176 & 0.561& 0.2395& 0.469 & 0.317 & 0.26\\
+		\midrule
+		$CM_{AS}$ & 1.0 & 1.0 & 1.0 & 0.0002 & 0.949 & 0.858 &0.901 & 0.0001 & 0.865 & 0.866 & 0.865 & 0.0001\\
+		$CM_{Hybrid}$ & 1.0 & 1.0 & 1.0 & 0.952 & 0.945 & 0.86 & 0.9 & 0.561& 0.875 & 0.933 & 0.903 & 0.2584 \\
+		\bottomrule
+	\end{tabular}
+	\caption[Evaluation results for camera misalignment algorithms.]{Camera misalignment assessment results regarding precision (P), recall (R), F1-score (F1), and the runtime regarding the quota of duration of the assessment in relation to the duration of the dataset. This is termed real-time suitability (RTS), where a value below 1 indicates real-time calculation.}
+	\label{tab:556_eval_camera_misalignment_table}
+\end{table}
+The proposed camera misalignment algorithms are based on either auxiliary sensor readings ($CM_{AS}$), specifically the linear accelerometer or a hybrid combination with the video-based algorithm $CM_{Hybrid}$.
+$CM_{Saini}$ achieves no valid results for the CMDG, as low brightness conditions seem to affect the performance of the algorithm.
+
+For the remaining algorithms and datasets, none of the related approaches achieves similar detection rates of camera misalignments and tilts.
+Except for the JIKU dataset where the recall rate of $CM_{AD}$ reaches 0.7783, the metrics for the related approaches are always below 0.5.
+The two related approaches thus fail when being run on the respective datasets. 
+Especially, for the auxiliary sensor-based algorithm, small changes could significantly improve the results from the algorithm $CM_{AD}$ to $CM_{AS}$.
+An auxiliary sensor-based approach $CM_{AS}$ already achieves a quite reliable detection of tilts.
+The hybrid algorithm $CM_{Hybrid}$ improves the results and increases the runtime only slightly.
+In all cases the hybrid as well the proposed auxiliary sensor-based algorithm achieve F1-scores of 0.86 and higher.
+In many cases, the increased runtime of the $CM_{Hybrid}$ may not be worth the only minimal improvements in comparison to $CM_{AS}$.
+\paragraph{Runtime of the Algorithms}
+Considering the runtime of the algorithms: all algorithms can be executed in real-time.
+The auxiliary sensor-based algorithms are again executed most quickly, but the hybrid algorithm $CM_{Hybrid}$ achieves a similar performance with an RTS between 0.2584 and 0.945.
+The variance in the runtime can be explained by the varying dataset resolutions and needs for applying the video-based part in the $CM_{Hybrid}$ algorithm.

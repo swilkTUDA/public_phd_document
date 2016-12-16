@@ -1,0 +1,156 @@
+% !TeX spellcheck = en_US
+%************************************************
+% Chapter
+%************************************************
+\acresetall
+\chapter{Conclusion}\label{ch:conclusion}
+This thesis discusses the advantages of integrating content adaptation into the design of networked video applications.
+Specifically, it discusses the scenario of an \acf{MBS} that records video on smart mobile devices and uploads them using \ac{IP}-based network connections as a live stream.
+The scenario also includes the distribution of the generated live stream to viewers.
+Systems were designed and implemented that improve video adaptation significantly, and they were carefully evaluated.
+This chapter summarizes the thesis and shows its major contributions to the field of multimedia research.
+Finally, it gives an outlook on future research directions.
+\section{Summary of the Thesis}
+The thesis aims at the design, realization, and evaluation of a live \ac{UGV} uploading, processing, and distribution system that leverages quality-aware content adaptation.
+Content adaptation is used at different steps of the video streaming process in the form of adaptive video streaming and video composition.
+Adaptive video streaming, as understood in this thesis, is the representation of a digital video in different quality versions, which differ regarding their average bit rate.
+During a streaming session, the video version is selected which suits best to the available throughput rates.
+By this, a video stream can be played back continuously without interruption.
+
+In contrast, video composition assumes the availability of different video sources which record similar content as different video files.
+The result of a video composition is not a multitude of different video streams, but a single one consisting of selected video segments from each source.
+Thus, a video composition algorithm does not select a representation of a single video stream but which video to stream at any point in time.
+
+Both content adaptation forms are used within this thesis in a way to enable \emph{quality-aware} video streaming.
+The quality awareness depicts that the perceived utility for a user watching the stream should be improved when using content adaptation.
+The efficiency ensures that a video stream is produced at minimal costs for a given quality.
+This thesis uses the perceived quality determined by objective quality assessment algorithms as an indicator for quality awareness, and the generated data traffic as a metric for costs.
+
+Chapter 1 introduces the scenario of a live upload of \acf{UGV}, its processing, and delivery.
+It discusses challenges such as the unpredictable conditions of \ac{IP}-based networks for a single device, the reduced quality of \ac{UGV} productions, and the devices used to create the digital video streams.
+The chapter introduces the main goal of the thesis: \emph{to design and realize a live \ac{UGV} uploading, processing, and distribution system that leverages quality-aware content adaptation}.
+
+Specific characteristics of digital video and its streaming are discussed in Chapter~2. 
+Furthermore, it builds upon the scenario discussed in Chapter 1 by elaborating on how content adaptation can help to improve the quality of video streams.
+As \ac{UGV} is different from professional content, there is a discussion about the perceived quality in \ac{UGV} in a novel area, the so-called \emph{recording degradations}.
+Whereas existing objective quality metrics inspect video for compression and transmission artifacts, \ac{UGV} mainly suffers from poor recording conditions and human mistakes.
+During recording, degradations occur such as camera shakes, objects occluding the view, and camera misalignments.
+In a discussion of related work, Chapter~2 shows that a research gap exists in this area.
+On the basis of a common understanding of quality, the chapter also introduces the \acf{MBS}, which aims at a live upload of videos.
+The chapter introduces different scenarios in which an \ac{MBS} is used, and discusses the strength and weaknesses of existing systems.
+These systems usually lack the capability of content and mechanism adaptations, making them unreliable for efficient media provisioning.
+Video composition is introduced as the second form of content adaptation which is a novel understanding on quality in videos. 
+Besides the technical and recording quality, composed videos gain a significant proportion of their quality from the influence of diversity and the observation of cinematographic rules.
+Existing work in this area is discussed to gain an understanding of the missing pieces provided by this thesis.
+Finally, Chapter~2 introduces background information and a discussion of existing work in the area of adaptive video delivery.
+It is shown that an adaptive video streaming approach usually neglects the content of a video and focuses on network conditions to make adaptation decisions.
+In summary, the chapter discusses the major differences of existing work and the novel contributions of this thesis.
+
+In Chapter~3, new quality models are given for quantifying the impact of recording degradations. 
+The most imminent degradations of camera shakes, harmful occlusions, and camera misalignments are discussed. Their impact on the perceived quality is quantified in a crowdsourced study with more than 1600 assessors. Besides the impact of degradations, the chapter discusses a study on the perception of different views of the same scene. The availability of such views is an essential requirement for video composition. The study shows that the recording position has a significant impact on the perceived quality and should thus be considered in the video composition.
+
+These quality models are used for the design and development of the quality assessment framework \ac{PaSC}, accompanied by novel algorithms.
+As introduced in Chapter~4, \ac{PaSC} copes with the unscalable, centralized quality assessment by introducing a method to leverage the resources of arbitrary smart mobile devices and servers to conduct a \emph{distributed quality assessment}.
+The \ac{PaSC} achieves increased resource utilization by parallelizing quality assessment processing.
+As existing, efficient algorithms for the assessment of recording degradations are missing, the chapter introduces novel quality assessment algorithms that inspect recording degradations.
+To handle the tradeoff between the algorithm's high precision and a reduced runtime, \emph{hybrid algorithms} are developed that not only consider time-intensive video analysis, but also inspect auxiliary sensors that record the context of a recording session. The proposed algorithms outperform existing work regarding the F1-score and the runtime, as well as offer a more fine-grained determination of video quality.
+
+Chapter 5 describes how videos are uploaded, e.g., to a video composition server, in an efficient and content-adaptive manner.
+\ac{LiViU} is introduced that is the first prototype for a live streaming application which supports the \emph{parallel creation of video representations and ensures their live upload for further processing}.
+\ac{LiViU} not only supports content adaptation, but also integrates the adjustment of the stream scheduling to cope with varying application and scenario requirements.
+The proposed system shows robustness against network condition changes, mobility, and copes with varying application requirements at runtime.  
+
+The findings and system components of Chapters 4 and 5 are used in the design and realization of a \emph{novel video composition algorithm}.
+Video composition is one of two content adaptation concepts discussed in this thesis.
+It aims at creating superior quality composed video by selecting the best segments from a range of source videos. 
+The videos are composed on a central server in real-time, based on video streams provided by \ac{LiViU}. 
+In a first stage of the proposed composition algorithms, Chapter 6 describes the filter stage, ensuring that video views considered for composition have a minimal perceived quality using \ac{PaSC}.
+Furthermore, the stage ensures that basic cinematographic rules are not broken when switching between segments of different video sources.
+As a result, a limited amount of video views is considered for composition in a second stage.
+The second stage either runs the semi-automatic CrowdCompose system or the real-time, automatic AutoCompose algorithm.
+CrowdCompose is based on the principle of crowdsourcing, which splits the complex task of video composition into several atomic tasks and mediates them to a group of anonymous users.
+Users compose the stream by conducting these tasks in parallel and create a superior quality video by leveraging human understanding of the scene.
+The composed videos and decisions are used to train the machine learning-based AutoCompose, which creates composed videos based on the decisions of CrowdCompose combined with a multi-feature analysis of a video stream.
+The resulting, composed videos have a lower quality in comparison to the manual video mixes but are superior to comparable video composition algorithms.
+
+The composed video is transmitted to interested viewers.
+The delivery of the video stream leverages the second content adaptation principle, namely adaptive video streaming.
+Adaptive video streaming allows for leveraging different quality versions of a video to compensate for varying network conditions by switching between the versions.
+Existing work conducts this adaptation of video representations in a network-aware manner, but neglects considering the content of the transported video.
+The proposed \ac{VAS} allows a \emph{content-aware video adaptation} by categorizing videos using \acf{SI}, \acf{TI}, and \acf{Co} descriptors. 
+The features are linked to an objective quality metric to realize a quality lookup datasets, which allows for real-time adaptation of new video streams.
+As a result, not only can the perceived quality be kept, but also data traffic to mobile devices is reduced by up to 82.83\%.
+
+\section{Contributions}
+The contributions of this work start with fine-granular quality models for the degrading impairments of camera shakes, harmful occlusions, and camera misalignments.
+These models are the first, published quantification of the degradations' impact on human perception.
+A second contribution of Chapter 3 is the analysis of different recording positions and their influence on the perceived quality of, e.g., a composed video.
+Novel quality models are proposed which assess the quality of the recording position in relation to the distance and angle to a \acf{PoI}.
+These models are the basis for the contributions in the remaining chapters.
+
+In addition, Chapter 4 leverages the models to design novel quality assessment algorithms for real-time detection of degradations.
+The proposed algorithms decrease the runtime by fusing visual and auxiliary sensor-based features while analyzing the videos.
+On several different \ac{UGV} databases, it was shown that this hybrid analysis outperforms comparable work.
+Also, Chapter 4 discusses how to increase the scalability of quality assessment by introducing the \ac{PaSC}.
+The \ac{PaSC} allows for the distributed execution of quality assessment algorithms on servers and mobile devices to achieve increased scalability and reduced runtime of a complete assessment of a video stream.
+
+Chapter 5 introduces the first prototypically evaluated \ac{MBS}, which allows for adaptive video streaming and network mechanism adaptation.
+For content adaptation, the proposed \ac{LiViU} achieves an in-parallel creation of different video representations by leveraging hardware-accelerated transcoding on Android devices.
+Different representations can then be used to adapt the streamed video bit rate according to current network conditions.
+In combination with an adaptive scheduling of video stream messages, \ac{LiViU} copes with changing network and application requirements.
+This allows \ac{LiViU} to stream both to remote and close-by receivers.
+The proposed system achieves a reliable, in-time upload of live streams from mobile devices, despite mobility and varying network conditions.
+
+Chapter 6 discusses contributions of the first semi-automatic, crowdsourcing-based video composition algorithm as well as an automatic composition application. 
+By splitting and atomizing both the video composition task CrowdCompose shows how an improved quality video stream can be created. 
+The resulting composed videos are leveraged to train the AutoCompose system, which achieves a real-time, automatic composition of \ac{UGV}.
+It is the first composition algorithm that achieves a comparable quality to an amateur composition of a video for live streams.
+
+The last contributions are discussed in Chapter 7, which introduces the quality-aware adaptive streaming system \ac{VAS}.
+It offers the first content-aware adaptation system for \ac{DASH} clients that supports live streams.
+Also, it shows that the perceived quality models can be mapped between different videos as long as some sophisticated, yet easily calculated features exist for classifying video content.
+In the discussed version of the \ac{VAS} spatial, temporal, and color features are discussed.
+As a result, the data traffic of streaming media can be reduced significantly.
+
+Thus, in total, the thesis offers contributions towards the design, realization, and evaluation of a live \ac{UGV} uploading, processing, and distribution system leveraging quality-aware content adaptation.
+\section{Outlook}
+Based on the contributions of this thesis, further steps to improve content adaptation can be taken.
+\subsection{Personalization and Distribution of Video Composition}
+Existing video composition algorithms rely on the inspection of the video.
+In recent work by Stohr et al., an early-stage prototype towards the auxiliary data-based composition of videos is shown~\cite{Stohr2016}.
+A central element in this prototype is the idea of preprocessing the composition on mobile devices as proposed by the \ac{PaSC}.
+The next step is a decentralized composition, when different mobile devices are coordinated to compose the video stream.
+This decentralization allows the placement of video composition functionality on mobile devices to support a composition in situ as well as in the fixed network, in which programmable network elements can support video composition as the media is transmitted through the network.
+
+A second extension of our work considers the concept that a single video is composed of multiple streams.
+A composition is conducted to increase the perceived quality for an average viewer.
+As individual users can have different expectations of a video stream, a single composed video may not be enough.
+The personalization of the video composition can generate a multitude of composed videos, depending on user expectations and viewing habits.
+An assessment of how personalized videos should be composed as well as their efficient transmission over challenged networks, is still missing.
+\subsection{Adaptive Upload of Video Streams}
+The proposed \ac{LiViU} system focuses on content adaptation and proposes adaptation of network mechanisms such as scheduling.
+Other mechanisms can also influence the perceived quality.
+Stohr et al. gave an interesting analysis on the effect of the congestion control mechanisms (e.g., in \ac{TCP}) on the video streaming experience for distributing video~\cite{Stohr2016b}.
+It is shown that varying environmental conditions affect the performance of congestion control variants.
+Future \ac{MBS}s may inspect the advantages of congestion control adaptations for video uploads.
+\subsection{Context and Quality}
+The perception of quality and its understanding are central concepts in this thesis.
+Still, little is known about the perception of video on mobile devices in different contextual situations, e.g., movement.
+These models are required as mobile video consumption grows tremendously.
+Ideal viewing conditions, as evaluated in current lab setups, are thus only of limited help to understand quality in mobile streaming sessions.
+The aspects of unstable viewing conditions have been integrated into the prototype of an environmentally-aware, video-streaming client~\cite{Wilk2015b}.
+Further research is needed to understand and leverage the context and environment when streaming video to mobile clients.
+This research can leverage the existing understanding of network conditions and content characteristics as offered by \ac{VAS}.
+\subsection{Information Centric Networks}
+Novel paradigms are proposed to solve the existing challenges of the Internet by its complete redesign.
+\ac{ICN} is a novel concept which replaces host-centrality in the current Internet by information-centrality.
+Addressing of information or content becomes independent of the location of the data.
+The focus on information or content offers new opportunities for content adaptation for both adaptive video streaming and video composition.
+For example, the proposed \ac{VAS} has to cope with some additional challenges as video segments can be distributed in an \ac{ICN} on different servers.
+\ac{MPEG} \ac{DASH} leverages the throughput measurement of a video segment to select the the appropriate representation for the next segments. This can be dangerous if the segments are requested from different servers.
+An overview on upcoming challenges when combining \acp{ICN} and adaptive video streaming is presented by Wesphal et al.~\cite{rfc7933}.
+Video composition on the other hand benefits from a native support of content provider mobility in \acp{ICN}.
+Especially, when a large set of smart mobile devices produce live video streams,
+addressing and routing in \acp{ICN} promise to ease the selection of video streams for composition, as a virtual director sends a request for a desired video stream into the network.
+This request may include information such as the desired minimum quality and recording location.
+This would reduce the computational burden of video composition applications, which promises an increased scalability which is not available today.

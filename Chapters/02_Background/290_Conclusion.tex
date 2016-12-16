@@ -1,0 +1,27 @@
+% !TeX spellcheck = en_US
+\section{Summary and Outlook on Contributions}
+This chapter summarizes the fundamentals and existing work for the quality assessment, the recording, uploading, and the processing and distribution of live \ac{UGV}, where a special focus lies on ensuring a quality-aware content adaption. % streaming.
+The application scenario describes smart mobile devices capturing video to live broadcast the streams to nearby and remote devices. 
+%The upload and transfer of the videos to receiving smart mobile devices implies 
+Two forms of content adaptation are proposed: (1) adaptive video streaming, which allows a switch between video versions while keeping the same content; or
+(2)~video composition which dynamically selects the appropriate content at a given time.
+
+Both concepts require a reliable and in-time video quality assessment, which is realized by objective quality assessment algorithms.
+The survey on objective quality assessment algorithms shows that existing work lacks the investigation of degradations that occur during the process of recording a video.
+None of the existing algorithms are based on validated quality models.
+These research gaps are addressed in Chapter~\ref{chapter:400_RecordingQuality} and Chapter~\ref{chapter:550_scalable_quality_assessment} of this thesis.
+The existing algorithms for quality assessment, which focus on degradations occurring during the encoding and transmission of video streams, are either slow or imprecise.
+In addition, concepts are missing for conducting video quality assessment at scale.
+The reduction of the runtime of the algorithms, as well as an increased scalability, is presented in Chapter~\ref{chapter:550_scalable_quality_assessment} and Chapter~\ref{chapter:500_videoUpload}.
+
+The provisioning of adaptive video streams from smart mobile devices is an unexplored research direction, as current protocols neglect adaptability of the system and incorporation of application requirements.
+A novel \ac{MBS} is presented in Chapter~\ref{chapter:500_videoUpload}.
+
+Also, the state-of-the-art for the two content adaptation types adaptive video streaming and video composition are discussed.
+Existing video composition algorithms neglect the assessment of a video's quality, cannot leverage knowledge available from directing, and are incapable of performing real-time composition.
+A quality-aware and real-time composition approach is the main contribution of Chapter~\ref{chapter:600_videocomposition}.
+
+Finally, quality-aware video delivery by using adaptive video streaming is investigated.
+It is found that the content of a video has a significant influence on its perceived quality.
+Existing protocols lack a content-aware adaptation of digital video streams.
+A solution to this gap is given in Chapter~\ref{sec:700_VAS}.

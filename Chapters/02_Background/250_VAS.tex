@@ -1,0 +1,261 @@
+% !TeX spellcheck = en_US
+\section{Content-aware Video Delivery to Mobile Devices}
+\label{sec:250_background_content_aware_delivery}
+Adaptive video streaming is able to cope with unpredictable network conditions and to ensure the delivery of the highest achievable video quality in each streaming session.
+This section discusses state-of-the-art mechanisms for adaptive video delivery and shows that recent proposals do not address video content inspection for increased efficiency of video delivery.
+\subsection{Adaptive Video Streaming}
+\label{sec:250_AdaptiveVideo}
+Adaptive video streaming allows the adjustment of the video source to the available network conditions, i.e., the throughput, during playback of a video~\cite{DeCicco2010}.
+From a conceptual point of view, different protocols have been proposed for implementing the concept, ranging from server-driven adaptation to today's predominant client-driven adaptation. 
+\subsubsection{Server-driven Adaptation}
+For the server-driven adaptive video protocols, the media streaming server keeps track of the state of all connected streaming clients, so it can centrally switch the video version.
+The approach allows fine-granular switching as the server has full control over the media and knows the upcoming video chunks, their bit rate, and the network throughput.
+This complexity on the server is often a bottleneck when the number of streaming clients increases.
+The server-driven adaptation schemes have less information on the effective throughput at the client side.
+As a result, the client has to regularly inform the server of the current network conditions to effectively adapt the video stream.
+At the same time, the processing requirements of servers increase with the number of clients, leading to the need for server infrastructures with high processing power. 
+Usually, server-driven adaptation implies that scheduling of a video stream is push-based.
+Different systems have been proposed which use server-driven adaptation, mainly on the basis of push-based streaming protocols such as \ac{RTP}, \ac{RTSP} and \ac{RTCP}~\cite{Fiandrotti2010,Liu2003,Wien2007}.
+\subsubsection{Client-driven Adaptation}
+The state-of-the-art approach for handling video streaming systems, which are used by large-scale user groups, is client-driven~\cite{Akhshabi2011,Sandvine2016}.
+Each client receiving a media stream makes its own - usually independent - decisions on which video representation to stream.
+This decision is usually based on the network conditions measured at the client.
+As a result, streaming servers do not have to establish persistent connections to the clients and can avoid keeping track of the client's state.
+In many cases, this allows video providers to use simple and cheap web servers.
+Client-driven adaptation infers a pull-based scheduling.
+
+As no data on the streaming session is evaluated centrally, each client adapts on its own, which may lead to individually optimal, but globally suboptimal adaptation results.
+Approaches exist that establish mediating instances to gather the knowledge and optimize the streaming across clients~\cite{Thomas2016}.
+
+Client-driven adaptation is the predominant adaptive video streaming concept, especially due to \ac{HAS} protocols.
+\ac{HAS} represents streaming protocols which allow a client-driven adaptation during video streaming, where the underlying communication protocols are set.
+As an application layer protocol, it leverages \ac{HTTP}; and thus, \ac{TCP} is used on the transport layer. 
+It ensures reliable, in-order transfer of video stream chunks.
+Artifacts in the video due to lost video chunks cannot occur.
+\ac{TCP}'s slow retransmission behavior and congestion control have shown drawbacks in comparison to \ac{UDP}-based streaming systems.
+Even though the congestion control of \ac{TCP} is not ideal for video streaming, many downsides can be compensated when using content adaptation.
+Thus, the less efficient \ac{TCP}-based streaming has been widely adopted in the industry~\cite{Akhshabi2011}.
+\ac{HAS} protocols are predominant in today's \ac{IP}-based video streaming~\cite{Akhshabi2011}.
+Until June 2016, 35.2\% of the North American Internet traffic is caused by videos delivered using \ac{HAS}~\cite{Sandvine2016}.
+It can be said that a majority of today's video streams are delivered by client-driven adaptive streaming systems, especially \ac{HAS}.
+\subsection{Dynamic Adaptive Streaming over HTTP (DASH)}
+\ac{DASH}~\cite{Stockhammer2011} is the most recent development of \ac{HAS}.
+\ac{DASH} is the standardized evolution of proprietary \ac{HAS} solutions such as Microsoft Smooth Streaming~\cite{SmoothStreaming2016}, Adobe's \ac{HTTP} Dynamic Streaming\footnote{http://www.adobe.com/de/products/hds-dynamic-streaming.html; Visited on: 10/06/2016} and, it is related to Apple's \ac{HLS}~\cite{hlsDraft}.
+\ac{DASH} standardizes the protocols for the transport of the video stream similar to \ac{HAS}. 
+It defines the description of video versions in a manifest - the \ac{MPD}.
+The different versions of a video that are used for adaptation are called \emph{representations}.
+The standard is agnostic to how these representations are en- or decoded, but they should have different target bit rates representing different quality levels. 
+Resulting bit rates are affected by the video resolution, the signal-to-noise level (or quantization), and the frame rate of the video. 
+The video characteristics, e.g., the structural complexity and the motion, affect the resulting bit rate of a video. 
+The representations of a video are split to equal duration segments and stored independent of each other.
+
+A \ac{HTTP} server is used for distributing video segments, as clients pull the segments using \ac{HTTP}. 
+The manifest eases the selection of a segment and quality as it describes each segment with the representation's resolution, bit rate, and frame rate. 
+Depending on the available network resources, the client decides at runtime which quality to request by selecting the next segment accordingly.
+How to come up with an adaptation decision is not specified in the standard, but intensively discussed in research.
+\subsection{Quality in \ac{DASH}}
+\label{sec:250_adaptation_effects}
+For determining the quality of individual \ac{DASH} representations, it is commonly agreed that regarding quality, the highest bit rate video representation is preferred over lower bit rate representations.
+Thus, quality models depict the quality of a representation in relation to the highest bit rate representation~\cite{Hossfeld2014}.
+Simple approaches see a linear relationship between the perceived quality and the bit rate.
+Zinner et al. studied the relationship between the video clip quality and the bit rate, which approximately follows a logarithmic function~\cite{Zinner2010}. 
+Besides subjective evaluations, objective \ac{FR} quality metrics are used to determine the perceived quality of each video representation in relation to the highest bit rate representation.
+Objective quality models can be generated by objective quality assessment metrics, which are discussed in Section~\ref{sec:210_qualitymetrics}.
+
+The \ac{TCP}-based delivery in \ac{DASH} ensures that only a limited set of degradations can occur in a video streaming session.
+Severe impact on the perceived quality was shown for video playback freezes (i.e., video \ac{stalling}),  initial playback delay, and effects of adaptations between different \ac{DASH} representations.
+\subsubsection{Initial Startup Delay and Video Stalling}
+\label{sec:250_stalling_video}
+Video streaming clients require a playback buffer, which stores received video segments before playback. 
+The buffer is used to compensate throughput changes, which can lead to video \ac{stalling}.
+Stalling occurs when the video playback buffer of a client depletes as the network throughput rate falls below the bit rate of the current video representation for a longer duration.
+When a streaming session starts, the client has to fill the buffer to begin playback.
+This initial duration is called the \emph{initial startup delay}.
+It is affected by the network throughput, the streamed representation, and the buffer size.
+The impact of this degradation has been discussed extensively in current research. 
+It is commonly agreed that for \ac{HAS}, \ac{stalling} is the most severe quality impairment, and the initial startup delay is of lesser importance~\cite{Hossfeld2011,Mok2011,Seufert2015}.
+
+The work of Pastrana-Vidall~\cite{PastranaVidal2004} is one of the first contributions showing that \ac{stalling} events - especially the frequency and duration of \ac{stalling} - degrade the perceived video quality.
+Their finding is that a single \ac{stalling} with a long duration is preferred in comparison to multiple \acp{stalling} of shorter duration.
+Additionally, video viewers prefer a periodically occurring \ac{stalling} pattern with stable intervals, in contrast to unpredictable \ac{stalling} patterns.
+This finding is supported by Moorthy et al.~\cite{Moorthy2012}.
+
+For HTTP-based streaming Mok et al. discusses that the \ac{stalling} rate is the main cause for a reduction in quality~\cite{Mok2011}. 
+Their model:
+\begin{equation}
+MOS = 4.23 - 0.0672 * L_{ti} - 0.742 * L_{fr} - 0.106 * L_{tr} 
+\end{equation}
+where $L_{ti} $ (L1: 0-1 seconds; L2: 1-5 seconds; L3: more than 5 seconds) is the level of the initial starting delay, $L_{fr}$ is the level of frequency of stalling events (L1: 0-0.02; L2: 0.02 - 0.15; L3: more than 0.15) and $L_{tr} $ is the level of duration of the stalling time (L1: 0-5 seconds; L2: 5 - 10 seconds; L3: more than 10 seconds).
+They normalize the different metrics to levels in a range from 0 to 3.
+
+A similar model is proposed by Hossfeld et al.~\cite{Hossfeld2013}.
+It differs in terms of the coefficients but has in common with Mok et al.'s or Van Kester et al.'s model~\cite{VanKester2011}, that the frequency of \acp{stalling} has the highest impact on the perceived quality followed by the duration.
+The models show a high correlation with subjective studies in \ac{HAS} protocols.
+For mobile devices such as tablets, stalling is identified as the major degradation by Floris and Atzori et al.~\cite{Atzori2014,Floris2012}.
+Moorthy et al.~\cite{Moorthy2012} extend their work, indicating that the common assumption that video stalling should be avoided at any cost is not always true. 
+Video adaptations to low bit rates can have a more severe impact on the perceived quality in comparison to a single stalling event.
+\subsubsection{Video Adaptation} 
+\label{sec:250_videoAdaptation}   
+A central task of adaptation schemes in adaptive video streaming systems is to plan representation switches in a way to not distract the viewers, or decrease their viewing experience~\cite{Papadimitriou2007}.
+
+\paragraph{Influence of Video Dimension}
+We define that current video encoding standards can be adapted in the spatial (resolution), the temporal (frame rate), and the quality \ac{SNR} - or quantization - dimension.
+Videos can be encoded so that adaptation is possible in each of the dimensions.
+In an extensive literature review, Seufert et al. show that video dimensions should be considered in an adaptation process~\cite{Seufert2015}. 
+
+Zinner et al.~\cite{Zinner2010} studied the effects of adaptations in the temporal and spatial dimension of a video
+using objective video quality metrics.
+The results show that higher resolutions should be favored rather than an increased frame rate. 
+Adaptations investigated include switches in the video resolution and the frame rate.
+The temporal dimension has a significant impact on the video quality when the motion in a video is high~\cite{Ghinea1998}.
+Also, the \ac{SNR} dimension value can be estimated by using the bit rate as an indicator of the same content, resolution, and frame rate~\cite{Garcia2010,Zhai2008}.
+
+Resolution or spatial adaptation is the key dimension for small screens, and the impact of an adaptation is related to the respective shot type~\cite{Knoche2007,Knoche2005}.
+
+Toni et al. discuss how to perform encoding with an optimized set of video representations~\cite{Toni2015}. 
+The results of the study show that up-sampled lower resolution videos can provide the same perceived quality in comparison with higher resolution videos; however, only certain video genres benefit from this finding.
+
+In subjective studies by Zhai et al., it is shown that those statements cannot be generalized, as it is very dependent on the content of a video~\cite{Zhai2008}.
+High-motion videos prefer a temporal adaptation, whereas others prefer adaptations in the other dimensions.
+ 
+\paragraph{Impact of the Adaptation} 
+Zink et al. discuss that the adaptation process influences the perceived quality~\cite{Zink2003}.
+The core findings of Zink et al.'s work include that the frequency and amplitude of an adaptation have an effect on the perceived quality.
+The amplitude defines the number of representations between the currently played back representation and the target one.
+Frequent adaptations can result in a reduced overall quality in comparison to the playback of the lowest available video representation.
+The amplitude of an adaptation should be kept as small as possible to avoid quality-degrading effects.
+
+Garcia et al. analyze the effects of adaptation strategies on the perceived quality~\cite{Garcia2014}. 
+Studies of different types of quality switching such as encoding, spatial, temporal, and audio switches are compared. 
+They show that multiple gradual quality switches are preferred in comparison to abrupt variations. 
+Frequent switches are an impedance to a good user experience, unless they allow watching the highest quality for a certain time. 
+Nonetheless, a consistent quality level is generally preferred to variable quality. 
+
+In most situations, the best adaptation depends on the encoded video content~\cite{Knoche2005,Lee2011,Rajendran2002,Wang2003,Zhai2008}.
+When different video dimensions are analyzed for a content-aware adaptation, it leads to a higher perceived quality than using a single quality dimension~\cite{VanDenEnde2007}.
+
+Moorthy et al. highlight that if quality levels exhibit a small degree of separation the adaptation cannot be perceived by users; thus, adaptations can be performed in a seamless manner~\cite{Moorthy2012}.
+A similar but generalized finding is made by Ni et al.~\cite{Ni2011}.
+Viewers accept quality switches of up to four quantization steps for the quality dimension, a third of the original frame rate for the temporal dimension, and only half of the original frame resolution for the spatial dimension.
+
+Also, Moorthy et al. and Ni et al. indicate a relationship between the frequency and the amplitude of adaptations~\cite{Moorthy2012,Ni2011}. 
+For example, low-frequency adaptations can reduce the perceived impact if strong quality variations occur.
+More frequent adaptations are allowed if this allows a viewer to watch the higher video quality layer for at least one-third of the overall video duration.
+Both research groups indicate that a constant perceived quality is preferred in comparison to highly varying, perceivable changes.
+
+Recently, studies show that viewers get used to adaptations in a video.
+A study from 2016 shows that users of a \ac{HAS} stream are no longer impaired by the number of video representation switches~\cite{Nam2016}.
+In contrast, it is more important that the adaptation is conducted in a covert manner.
+Their finding is that the high amplitude adaptations should be avoided.
+\subsection{Existing Adaptive Streaming Systems}
+In the existing literature and practice, it is shown that the distribution of digital video over the Internet is driven by the demand of high bit rate content, delivered via \ac{HAS}-based systems, which encounter the challenge that performing adaptations may have an impact on the perceived quality.
+The content of a video has repeatedly been reported to have a significant impact on the perception of adaptations and the quality of video representations~\cite{Garcia2010,Ghinea1998,Knoche2007,Knoche2005,Zhai2008}, but no generalized rules have been reported.
+
+Another challenge comes with the rise of mobile video streaming, leading to a clash with these requirements, as access contracts limit the availability of high-speed Internet in particular on mobile devices.
+The leading mobile telecommunications provider in Germany recently announced that unlimited data traffic for \ac{LTE} access costs approximately 159 Euro per month\footnote{https://www.t-mobile.de/tarifoptionen/datenoptionen; Visited on: 06/09/2016.}.
+\subsubsection{Categorizing Adaptive Systems}
+This thesis offers a discussion of the state-of-the-art adaptive video streaming systems following certain assessment characteristics, presented here.
+
+\emph{Mobile device (MD)} support represents if the system design of an application considers the limitations of today's mobile devices such as reduced processing capabilities, lack of codec support, and energy limitations.
+Current streaming systems should cope with varying \emph{network conditions (NW)}, as they affect the streaming experience. 
+This can be achieved by \emph{adapting} between different bit rate representations of the same video.
+The adaptation of the video is not limited to solely the bit rate but can adapt in the different video dimensions including temporal, spatial and \ac{SNR} dimension.
+
+As the predominant approach for the delivery of video, it shall be investigated whether the proposed systems can be mapped to or use \ac{HAS} for media delivery - and if they infer additions or modifications of the principles of \ac{HAS}, such as client-driven adaptation and the usage of \ac{HTTP}.
+
+Adaptive streaming systems can leverage the advantages of novel video \emph{encodings}, which can be classified into \ac{SVLC} and \ac{MVLC}.
+As a result, the system can leverage essential properties of the respective encoding or be agnostic to it.
+
+Users demand quality-aware streaming, which offers the advantage of delivering the desired quality with minimal data traffic. 
+\emph{Quality Metric} describes if and which objective quality metric is used for estimating the video quality.
+
+The computational processing needs, which are implied by a quality-aware video streaming, can be enormous. 
+The usage of objective quality metrics, the application of \ac{MVLC} and the adaptation considering different video dimensions may lead to scenarios in which significant preprocessing of the video content is required.
+Under these circumstances, it has to be assessed if the related systems support \emph{live streaming} with currently available technology.
+
+Finally, the two main performance criteria for mobile live streaming shall be assessed:
+1) Do the approaches focus on \emph{quality-aware} streaming? 2) Do the applications consider the reduction of data traffic for mobile streaming clients? 
+\subsubsection{Discussion of Related Approaches}
+Literature and practice propose a set of adaptive video streaming systems, which improve video streaming in fixed and mobile networks. 
+Systems aiming at quality-aware streaming are discussed in Table~\ref{tab:250_Related_Work}.
+\begin{table}
+\centering
+\caption[Comparison of existing content-adaptive video delivery systems]{Overview of related work for content-adaptive video delivery. Features used for comparison include -- MD: capable for mobile devices; NW: respects network conditions; Content Dimension: which quality dimensions of a video are respected (B: bit rate only; T: temporal; Q: quantization/ SNR; S: spatial); HAS: HTTP Adaptive Streaming; Coding: Leveraging of SVLC anf MVLC;  Quality Metric: Used video quality metric; Live: Live streaming support; Focus - Quality: Quality aware streaming; Traffic: Data traffic reduction. +: implemented; $\circ$: compatible; - unsupported.}
+\begin{tabular}{lccccccccc}
+\toprule[1.5pt]
+& & & & & & & & \multicolumn{2}{c}{Focus}    \\ \cline{9-10} 
+ &  \textbf{MD} & \textbf{NW}  & \textbf{\specialcell{Adaptation\\ (Dimensions)}} & \textbf{HAS}  & \textbf{Encoding}   & \textbf{\specialcell{Quality\\ Metric}} & \textbf{Live} & \textbf{Quality} & \textbf{Traffic} \\ 
+\toprule[1.5pt]
+SARA~\cite{Juluri2015} & $\circ$ & + & B & + & SVLC  & - & $\circ$ & $\circ$ & -\\
+AGBR~\cite{DeVleeschauwer2013} & +& +  & B & + & SVLC  & - & + & $\circ$ & - \\
+QDASH~\cite{Mok2012} & $\circ$& +  & B & + & SVLC & $\circ$ & + & $\circ$ & -\\
+PANDA~\cite{Li2014} &$\circ$ & +  & B&+ & SVLC & - & + & $\circ$ &- \\
+QFAS~\cite{Cicalo2014} & $\circ$ & +  & B&+ & SVLC & SSIM& - & + & - \\
+AMES~\cite{Wang2013} &+ & +  & B& - (push) & MVLC & - & $\circ$ & $\circ$ & - \\
+SVC over RTP~\cite{Fiandrotti2010} & - & + & T/S & - (RTP) & MVLC & PSNR & + & + & - \\
+CASV~\cite{Akyol2007} & - & +  & T/Q & - (push) & MVLC & custom & - & + & -\\
+Themis~\cite{Medjiah2014}& - & +  & B & - (P2P) & MVLC & -& - & +& -\\
+Transit~\cite{Wichtlhuber2014} & - & +  & T/S & - (P2P) & MVLC  & VQM & $\circ$ & + & - \\
+SVC over DASH~\cite{Hossfeld2015a}& $\circ$ & + & S & + & MVLC & SSIM& - & + & - \\
+QoE Proxy~\cite{Essaili2013} & + & + & B  & + &  agnostic  & PSNR & - & + & -\\
+QoE HAS~\cite{Devlic2015} & + & - & S/B & $\circ$ &  agnostic  & VQM & - & + & $\circ$ \\ 
+%\midrule[0.75pt]
+%VAS &+ & +  & S/T/Q & + & agnostic  & VQM \\
+\bottomrule[1.5pt]
+\end{tabular} 
+\label{tab:250_Related_Work}
+ \end{table}
+Simple streaming systems leverage information about the bit rate to improve the perceived quality of a streaming session.
+Juluri et al. introduce \ac{SARA}, an approach that integrates detailed information on video segments in the \ac{MPD} to predict the time required for the next segment to be streamed~\cite{Juluri2015}. 
+The influence of the video on the perceived quality is approximated by the relationship between the bit rates of the played back video at its highest bit rate representation.
+The preprocessing step adds an additional delay, which can limit the scalability of the approach in live streaming scenarios.
+
+These approaches do not investigate the influence of streaming over mobile networks to mobile devices, as, e.g., \ac{AGBR} does~\cite{DeVleeschauwer2013}.
+\ac{AGBR} proposes an optimal scheduler in cellular networks, which is run on the cell towers and optimizes the utilization of the available throughput.
+The system achieves an optimal allocation when a minimum tolerable throughput is available, and indicates a level when higher representations do not offer additional quality gains.
+Quality in this context is simplified to bit rates, too, but the streaming experience is improved by avoiding frequent video adaptations.
+The effects of adaptations are integrated into a \ac{HAS} adaptation scheme by Mok et al.~\cite{Mok2012}. 
+The proposed \ac{QDASH} system ensures that the switches are wisely planned integrating jumps to intermediate bit rate levels between representations.
+In their subjective studies, it was shown that these switches are beneficial.
+Furthermore, \ac{QDASH} assumes a network probing proxy, which helps to better determine the available network throughput.
+Similarly, Li et al.~\cite{Li2014} assume such a central component in the network for their \ac{PANDA} system, which optimizes the streaming across different clients by ensuring a consistent quality.
+ 
+\ac{QFAS} pursues the same goal and proposes a system which addresses cellular network delivery; and thus, mobile streaming clients, and extends quality awareness from purely considering bit rates to applying objective quality assessment metrics~\cite{Cicalo2014}.
+Simple and quick, but also slow, and precise objective quality metrics such as \ac{SSIM} are used to determine the effect of different video representations on the perceived quality.
+The usage of \ac{SSIM} limits the applicability of the system to non-live streaming scenarios.
+
+AMES is an example of a range of systems that leverage \ac{MVLC} in combination with \ac{HAS}-incompatible protocols, as they either rely on push-based delivery or \ac{P2P} assisted streaming~\cite{Fiandrotti2010,Medjiah2014,Wang2013,Wichtlhuber2014}.
+AMES supports mobile devices by an efficient transcoding of \ac{MVLC} to \ac{SVLC} and can therefore adapt while transcoding.
+The client-driven adaptation is no longer supported in such a delivery scheme.
+In \ac{P2P}-assisted streaming, especially the approaches of Transit~\cite{Wichtlhuber2014} and P2PStream~\cite{Abboud2012} are mentioned, which leverage a sophisticated perceptual video quality metric and \ac{MVLC} for video streaming.
+
+Hossfeld et al. combine \ac{HAS} and \ac{MVLC} by modeling a \ac{MILP} and thus an optimal quality adaptation scheme~\cite{Hossfeld2015a}.
+The leveraged quality models are supported by the perceptual quality metric \ac{SSIM} and are backed by a crowdsourcing investigation on the perceived quality of the video streaming sessions.
+Yielding the optimal solution by having global knowledge of a streaming session of an NP-hard optimization problem.
+The approach is not applicable to be used in practice.
+It is the boundary of what a heuristic could theoretically achieve. 
+The proposed models focus on fairness in streaming to multiple users and the effect of stalling.
+Also, the number of quality switches is modeled as an impact factor on the perceived quality, which has recently shown to be controllable, as long as the quality delta is small~\cite{Nam2016}.
+
+The approach of Essaili et al. fulfills a majority of the proposed characteristics, as it leverages video quality metrics for supporting mobile \ac{HAS} clients~\cite{Essaili2013}. 
+Both leverage a proxy to offload the task of quality assessment from mobile devices and are agnostic to media encoding. 
+Essaili et al. leverage a network monitoring proxy for rewriting \ac{HTTP} requests of clients and shapes the traffic between the client and the server~\cite{Essaili2013}.
+Standard \ac{HAS} clients are used and centrally coordinated by the \ac{LTE} base station.
+They are controlled so that they adapt in an optimal manner to achieve a fair distribution of network resources.
+
+Devlic et al. propose a delivery model for video streams by optimizing video content for a target quality~\cite{Devlic2015}.
+It is assumed that the video content affects the perceived quality of a video representation in a long-running video sequence.
+A video optimization scheme analyzes the video sequences offline, making the approach unsuitable for live streaming scenarios.
+The perceived quality is estimated by using the \ac{VQM}, being highly precise but computationally intensive.
+An optimization addresses the video content showing data savings are possible - yet it lacks, as an offline process, the consideration of network variations.
+\subsection{Discussion}
+What is obvious from Table~\ref{tab:250_Related_Work} and its discussion are the lack of applying quality-aware streaming that considers the video content.
+Video content affects the perceived quality in a manner where understanding helps mobile devices to stream video at minimal data traffic.
+The existing approaches focus on either ensuring that a streaming session is optimized regarding its individual perceived quality, or regarding fair share of quality across streaming receivers.
+These streaming systems thereby focus on network conditions alone, trying to avoid stalling effects.
+Moreover, they assume that the highest bit rate representation of a video is always beneficial for users.
+Video as a medium is not addressed at all - which offers a huge potential regarding a quality-aware adaptation, as different studies show a strong connection between the content being distributed and its potential for quality adaptation.
+Advanced adaptation schemes are used by \ac{P2P}-assisted streaming systems, which leverage quality as a good that can be shared with other clients.
+The approaches investigate the content being streamed using recent objective quality metrics, addressing different characteristics of a video.
+Those approaches are rather non-beneficial for mobile devices in cellular networks. 
+Currently, no content-aware \ac{HAS} adaptation system addresses the needs of mobile clients in cellular networks.

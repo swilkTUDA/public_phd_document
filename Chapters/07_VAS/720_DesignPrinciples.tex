@@ -1,0 +1,49 @@
+% !TeX spellcheck = en_US
+\section{Concept of VAS}
+\label{sec:720_DesignPrinciples}
+\subsection{Goals of VAS}
+The vision for \ac{VAS} is to enable high-quality streaming sessions with a minimum of generated data traffic.
+\ac{VAS} is designed for \ac{HAS} clients and focuses on mobile playback clients. 
+In the remaining work, it is assumed that \ac{VAS} leverages the video streaming protocol \ac{MPEG} \ac{DASH}. 
+However, the proposed concepts can easily be mapped to other \ac{HAS} protocols such as \ac{HLS}~\cite{hlsDraft} or Adobe \ac{HTTP} Dynamic Streaming\footnote{http://www.adobe.com/de/products/hds-dynamic-streaming.html; Visited on: 10/06/2016}.
+Three subgoals are derived for \ac{VAS}.
+
+First, \ac{VAS} aims to ensure a stable \emph{perceived quality} during the entire video streaming session.
+Each streaming client can specify this desired perceived quality.
+\ac{VAS} components are responsible for analyzing the video to determine the perceived quality of different representations and ensure that the video is played back at the desired quality level.
+If the content changes, e.g., after a shot switch, the perceived quality of a video representation may also change.
+\ac{VAS} stabilizes the perceived quality and not the bit rate of a streamed video.
+
+Stabilizing quality may introduce additional adaptations.
+The second goal of \ac{VAS} is to perform adaptations between different video representations in an imperceptible manner.
+If adaptations between representations are performed too abruptly, the perceived quality may be additionally degraded~\cite{Moorthy2012,Zink2003}.
+
+Third, \ac{VAS} aims at reducing data traffic by selecting the \ac{MPEG} \ac{DASH} representation that offers the desired perceived quality at a minimal bit rate. 
+Users benefit from a reduction of monetary expenses in data-capped cellular networks.
+Data traffic in cellular networks is rather expensive compared to fixed network contracts, and it is often capped.
+For example an unlimited data traffic contract for \ac{LTE} access costs approximately 159 Euro per month\footnote{https://www.t-mobile.de/tarifoptionen/datenoptionen; Visited on: 06/09/2016.}.
+\subsection{Design Principles}
+To achieve the aforementioned goals, \ac{VAS} follows five design principles (DP):
+\begin{DesignPrinciples}
+	\item \ac{VAS} supports clients in adapting video. \ac{VAS} is not executing adaptations on its own and complies with the \ac{MPEG} \ac{DASH} standard.
+	\item \ac{VAS} requires only minimal client modifications to allow its quick adoption.
+	\item \ac{VAS} recommends adaptations based on the perceived quality of the video and not the bit rate.
+	\item \ac{VAS} uses image processing algorithms to estimate the perceived quality.  
+	This is a computationally intensive task that should not be performed on the mobile devices.
+	\item \ac{VAS}'s adaptation strategies should integrate existing research on video quality and adaptation effects on mobile devices.
+\end{DesignPrinciples}
+
+\ac{VAS} is designed to \emph{support} video adaptation on mobile clients (DP1).
+Thus, the \ac{VAS} server acts as a quality assessment proxy for a mobile device that wants to adaptively stream video.
+Videos are directly streamed from the video server to the client, as any additional streaming delay should be avoided - which would be introduced by content inspection and video quality estimation in the path. 
+As a support service, one core principle of \ac{VAS} is to allow \ac{MPEG} \ac{DASH} clients to request and execute adaptations on their own.
+Thus, \ac{VAS} is not breaking the standard of \ac{MPEG} \ac{DASH} as it only offers an additional information source for making adaptation decisions~\cite{Stockhammer2011}.
+The \ac{MPEG} \ac{DASH} clients need a small modification that contacts \ac{VAS} and integrates the returned data into their decision-making process (DP2).
+
+Another reason for deploying \ac{VAS} as a support service is the large number of calculations that it requires.
+The calculations are a result of \ac{VAS}'s perceived quality estimation of different video versions (DP3).
+The quality is objectively estimated with a high reliability using image processing algorithms (DP4).
+
+The analysis of the perceived quality enhances existing adaptation services (DP5), which usually solely respect network conditions.
+Related research introduced new insights regarding how to execute adaptations (see Section~\ref{sec:250_adaptation_effects}).
+The adaptations introduced by \ac{VAS} shall not degrade the viewing experience (DP5).

@@ -1,0 +1,16 @@
+% !TeX spellcheck = en_US
+This chapter introduces novel algorithms to automatically analyze and quantify the impact of recording degradations on the perceived quality in a highly precise manner and with a low runtime.
+The classical video-based analysis is extended by auxiliary sensor data, such as accelerometer or gyroscope data, which is available during the recording of a video.
+Whereas video-based approaches are usually highly accurate, they require significant computational time, which makes most of them useless for real-time applications.
+Auxiliary sensor-based approaches offer quick results, but their performance degrades when the readings are inaccurate.
+This chapter introduces novel algorithms that can adapt between the visual and auxiliary sensor features.
+The first contribution of this chapter is a set of hybrid quality assessment algorithms for \ac{UGV}, which allows a real-time, \ac{NR} quality assessment for many multimedia applications.
+If not stated otherwise, the proposed algorithms can be applied to both independent \ac{UGV} streams as well as in-parallel recorded video streams capturing the same \ac{AoI} (needed for video composition).
+
+Most multimedia applications assume a central, high-performance server for the quality assessment~\cite{Shrestha2010,Zhang2012}, which limits the assessment's real-time suitability and the scalability. 
+While scalability is a must, resources of the mobile devices are not leveraged in this centralized quality assessment.
+Thus, the second contribution is a joint selection of appropriate quality assessment algorithms and their optimal placement on processing devices depending on variable application requirements.
+Applications can specify the timing requirements as well as the minimum precision of the quality metric to the proposed component, which takes care of selecting the best algorithm based on a utility-to-cost ratio. 
+We show that the second contribution can significantly improve scalability and ensures timely quality assessment.
+
+The chapter revises content presented in our peer-reviewed publications~\cite{Wilk2016e,Wilk2015c,Wilk2016g}.

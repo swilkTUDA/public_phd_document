@@ -1,0 +1,21 @@
+% !TeX spellcheck = en_US
+\section{Conclusion}
+\label{sec:540_conclusion}
+This chapter introduced the content- and mechanism-adaptive \ac{LiViU}, which allows for the efficient delivery of video streams to both remote and close-by receivers.
+The mechanisms supporting an efficient upload are gathered in an initial simulative study investigating existing \ac{MBS} protocols.
+It is shown for remote streaming, that \ac{UDP}-based protocols in combination with quick application-layer join procedures are most favorable to achieve low join times.
+The initial join time is critical, as it defines a lower bound for the liveliness for the remaining streaming session.
+The scheduling of the video stream messages can be either push- or pull-based.
+Which scheduling should be favored depends on the context, but especially on the application.
+
+From the findings gained in the simulative study, the novel \ac{LiViU} system has been designed.
+In the remote streaming case, \ac{LiViU} achieves high bit rate video streaming with minimal overhead.
+The proposed protocol includes an on-device transcoding of different video representations, and brings adaptive video streaming to the upload side. 
+Content adaptation in \ac{LiViU} ensures high continuity of the streaming session without stalling.
+It is supported by a scheduling mechanism adaptation, which allows \ac{LiViU} to specify which parts of which video stream shall be transmitted using push- or pull-based delivery.
+This functionality is offered to the multimedia application.
+This allows a high flexibility for the proposed multimedia applications in this thesis (\ac{PaSC} and video composition), but also for future developments.
+
+For in situ streaming scenarios, \ac{LiViU} achieves a reliable streaming experience even under motion without infrastructure support.
+In the in situ streaming case, \ac{LiViU} pursues a geographic distribution of the streams avoiding unnecessary redundancy in the message delivery.
+As a result, with \ac{LiViU} a superior \ac{MBS} is proposed, which is used for the \ac{PaSC} proposed in the previous chapter as well as the delivery of media streams for video composition, as discussed in the next chapter.

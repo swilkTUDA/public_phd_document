@@ -1,0 +1,89 @@
+% ********************************************************************
+% special diss stuff
+% ********************************************************************
+
+%===============================================================================================================
+% acronym stuff
+%\usepackage[printonlyused,smaller,withpage]{acronym}
+
+%===============================================================================================================
+% fixing lot, lof (label-space)
+%\addtolength{\figurelabelwidth}{-2em} %<---fix in classicthesis.sty
+
+%===============================================================================================================
+% special quote stuff
+\newcommand{\amquotestring}{\hfill}
+\newcommand{\amquote}[2]{%
+	\begin{center}%flushright flushleft center
+		\small%
+		%		\graffito{%
+		{\relsize{2}\color{halfgray}\frqq}#1{\relsize{2}\color{halfgray}\flqq} \\ \medskip %
+		\hfill --- #2%
+		%		}%
+		%\newline\vspace*{.9\baselineskip}
+	\end{center}
+}
+
+%===============================================================================================================
+% table stuff
+%\usepackage{pifont} % <-- for Friedi's heart symbol
+
+%===============================================================================================================
+% table stuff
+\usepackage{longtable}
+
+%===============================================================================================================
+% multiple bibliographies
+%\usepackage[printheadings]{bibtopic} % sectcntreset
+
+%===============================================================================================================
+% text size
+%\areaset[7.5mm]{360pt}{720pt}% <--- with footinclude deactivated [11pt MinionPro 348pt x 780pt  big: 360x785]
+\areaset[15mm]{410pt}{720pt}% <--- with footinclude deactivated [12pt MinionPro 348pt x 780pt  big: 360x785]
+\setlength{\footskip}{1.5em}%
+\setlength{\headsep}{.75em}%
+\setlength{\marginparwidth}{3.5em}%
+\setlength{\marginparsep}{.15em}%
+
+%===============================================================================================================
+
+
+%===============================================================================================================
+% using commas in math mode for 1,000
+%\usepackage{icomma} 
+
+%===============================================================================================================
+% todo graffiti
+%\usepackage[%disable,%
+%						backgroundcolor=yellow,%yellow
+%%						linecolor=lightgray,%lightgray gray
+%						bordercolor=black,%
+%						shadow,%
+%						textsize=scriptsize,%footnotesize scriptsize
+%						]{todonotes}
+%	\newcounter{todocounter}
+%	\newcommand{\todox}[2][]%
+%		{\stepcounter{todocounter}\todo[caption={\thetodocounter: #2}, #1]{\renewcommand{\baselinestretch}{0.5}\selectfont\thetodocounter: #2\par}}
+
+%===============================================================================================================
+% Setup and Finetuning
+%\newcommand{\myfloatalign}{\centering} % how all the floats will be aligned
+%\setlength{\extrarowheight}{3pt} % increase table row height
+%\captionsetup{format=hang}%,font={small}}
+
+%===============================================================================================================
+% Listings setup
+
+
+% maybe required later
+%\usepackage[section,below]{placeins} <--- not everybody wants this
+%\usepackage[all]{hypcap} <--- does not work with MiKTeX 2.6
+
+% new enumerations
+%\usepackage{enumitem}
+
+% photo for cv
+%\usepackage{eso-pic}
+
+% headers for describing the metamodel's elements
+%\newcommand{\myhead}[1]{\noindent\textit{#1}:\xspace}

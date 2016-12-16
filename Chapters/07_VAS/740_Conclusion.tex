@@ -1,0 +1,21 @@
+% !TeX spellcheck = en_US
+\section{Conclusion}
+This chapter introduced \ac{VAS}, a system to support video adaptation on mobile video streaming clients in a content- and quality-aware manner.
+The rationale behind \ac{VAS} is that current \ac{MPEG} \ac{DASH} clients do not investigate the content encoded in a video. % or the capabilities of a mobile streaming device such as supported resolutions and frame rates.
+Especially in situations when a network has sufficient throughput to stream the highest representation, huge data savings are possible when \ac{VAS} is used.
+\ac{VAS} leverages image processing algorithms and an objective video quality metric to understand what is encoded within a video and how it is perceived by humans.
+%For the service a real-time capable video quality assessment module is proposed called \ac{SUQA}, which allows the parallel estimation of perceived quality of several \ac{DASH} representation below real-time.
+\ac{VAS} analyzes the video content on its structural, temporal and color characteristics to classify segments of videos with similar characteristics. 
+It was shown that quality models can be mapped between segments of different video sequences without significant loss of precision.
+Both concepts allow real-time calculation of live video streams and scalability to a multitude of different video streams, which was demonstrated in a real deployment~\cite{Wilk2016c}.
+
+\ac{VAS} allows clients to express the desired quality regarding the \ac{MOS} and links it to \ac{MPEG} \ac{DASH} representations.
+Besides an optimal adaptation scheme, 
+two adaptation support heuristics are introduced which support \ac{MPEG} \ac{DASH} adaptation schemes: \ac{TQA} and \ac{SQA}.
+The \ac{TQA} allows to clients stream a specific target quality level, whereas classical adaptation schemes solely rely on bit rates.
+It aims for saving data traffic by not selecting \ac{MPEG} \ac{DASH} representations that surpass the desired quality.
+\ac{SQA} adds an adaptation support method, which mitigates adaptation effects introduced by \ac{TQA} and \ac{MPEG} \ac{DASH} adaptation schemes.
+\ac{SQA} leverages the knowledge of the video content to execute adaptations in a covert manner.
+The evaluation indicates that significant data traffic savings can be achieved (up to 82.83\%) without any decrease in quality.
+% and simultaneously achieve small, but significant quality improvements.
+%The introduction of \ac{SQA} furthermore allows efficient mitigation of any additional degradations induced by adaptations. %, which was not possible before.

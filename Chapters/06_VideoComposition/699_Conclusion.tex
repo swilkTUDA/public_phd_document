@@ -1,0 +1,19 @@
+% !TeX spellcheck = en_US
+\section{Conclusion}
+\label{sec:699_Conclusion}
+The proposed composition system consists of a filter stage, the semi-automatic CrowdCompose and the automatic AutoCompose.
+The proposed solutions comply with cinematographic rules and ensure a minimum video quality of the considered video views by using a filter stage in a first step.
+It achieves its real-time suitability by applying the concepts for video quality assessment as presented in Chapter~\ref{556:Assessment_Eval} and allows a distributed execution of the algorithms.
+It leverages auxiliary sensor reading to construct a model of the scene, which ensures that basic cinematographic rules are not broken. 
+
+In a second stage, the composition is realized using CrowdCompose or AutoCompose. Both algorithms give answers to the central composition questions: "Which video view is selected?" and "When should a switch be realized?" 
+CrowdCompose, a crowdsourcing-based algorithm, allows the near real-time composition by delegating the tasks of view selection and cut point placement to a group of people.
+Based on a majority consensus of the assessments, the best video view at any time and the ideal switching point are detected.
+To ensure a timely composition and to allow live streaming, the concepts of rapid refinement and pipelining of workers are introduced.
+The results for CrowdCompose show that a superior quality is achieved in comparison to automatic algorithms.
+
+From the models generated with CrowdCompose, AutoCompose learns how to automatically construct a composed video in a quality-aware manner.
+It leverages an \ac{SVM-HMM} to learn composition rules based on both content that is composed, and the location of recordings in a scene model.
+The composed videos lack quality in comparison to CrowdCompose, but are still preferred in comparison to other automatic composition algorithms.
+Video composition allows constructing video not only in a quality-aware, but also in an efficient manner. 
+By using the \ac{LiViU}, the generated data traffic is significantly reduced, allowing to furthermore reduce the uploaded data traffic under challenged network conditions and  distribute solely one quality enhanced composed video.

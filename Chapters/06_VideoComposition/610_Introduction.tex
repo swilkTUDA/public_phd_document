@@ -1,0 +1,25 @@
+% !TeX spellcheck = en_US
+\ac{LiViU} leverages the concept of video and network adaptation to both increase the quality of a video upload session and limit the generated data traffic.
+Still, \ac{LiViU} is not capable of mitigating recording quality degradations in a single video stream.
+Another form of content adaptation, the video composition, can compensate for these quality degradations by always selecting the best parts of different video streams.
+Video composition assumes that multiple video streams are generated in parallel.
+A video composition application analyzes different views of a scene and fuses them into one single video stream, depending on the video availability and quality. 
+At any given moment, only one source view is selected to be streamed to the receivers. 
+
+A video composition as a form of adaptation between different video views has several advantages.
+Live \ac{UGV} is often rather short in duration and cannot cover an entire real-world event in a single source video~\cite{Stohr2015}. 
+Video composition can ensure that at all available videos are leveraged to retrieve a complete coverage of an event.
+
+Also, the composed video stream can be of a stable quality as the highest quality parts of all source videos are used.
+Video stream quality is determined by the quality assessment algorithms proposed in Chapter~\ref{chapter:400_RecordingQuality} and Chapter~\ref{chapter:550_scalable_quality_assessment}.
+If we assume that quality assessment steps are realized on the mobile device during recording, a video composition application can further reduce the generated data traffic as only the high-quality video streams need to be uploaded.
+
+This chapter proposes a combination of a semi-automatic composition that leverages human knowledge to compose videos near real-time and train a novel, automatic video composition system.
+The basis for our video composition application is a filter stage, which ensures that high quality video views are considered for composition.
+This thesis proposes two composition applications: a semi-automatic and an automatic composition.
+The semi-automatic composition relies on crowdsourcing minimal tasks to a group of distributed users and leverages system support to ensure a timely composition.
+This composition - as human assessment is involved - copes easily with different video genres and content.
+Derived from manually generated composition models, AutoCompose allows for a fast, automatic composition of video streams.
+AutoCompose is based on the machine learning mechanism \ac{SVM-HMM}, a sequence-tagging machine learning approach that can efficiently compose videos.
+
+The concepts and evaluation results presented in this chapter are a revised and extended version of our peer-reviewed publications~\cite{Wilk2014c,Wilk2015c,Wilk2015d}.

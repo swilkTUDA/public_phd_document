@@ -1,0 +1,191 @@
+% ****************************************************************************************************
+% classicthesis-config.tex 
+% formerly known as loadpackages.sty, classicthesis-ldpkg.sty, and classicthesis-preamble.sty 
+% Use it at the beginning of your ClassicThesis.tex, or as a LaTeX Preamble 
+% in your ClassicThesis.{tex,lyx} with \input{classicthesis-config}
+% ****************************************************************************************************  
+% If you like the classicthesis, then I would appreciate a postcard. 
+% My address can be found in the file ClassicThesis.pdf. A collection 
+% of the postcards I received so far is available online at 
+% http://postcards.miede.de
+% ****************************************************************************************************
+
+% ****************************************************************************************************
+% 1. Configure classicthesis for your needs here, e.g., remove "drafting" below 
+% in order to deactivate the time-stamp on the pages
+% ****************************************************************************************************
+\PassOptionsToPackage{eulerchapternumbers,listings,%drafting,%
+	pdfspacing,%minionpro,%floatperchapter,%linedheaders,%
+	subfig,beramono,eulermath,parts,dottedtoc}{classicthesis}		
+
+								
+% ********************************************************************
+% Available options for classicthesis.sty 
+% (see ClassicThesis.pdf for more information):
+% drafting
+% parts nochapters linedheaders
+% eulerchapternumbers beramono eulermath pdfspacing minionprospacing
+% tocaligned dottedtoc manychapters
+% listings floatperchapter subfig
+% ********************************************************************
+
+% ********************************************************************
+% Triggers for this config
+% ******************************************************************** 
+\usepackage{ifthen}
+\usepackage{pgf,pgfsys,pgffor}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage[ngerman,american]{babel}
+\usepackage{listing}
+\usepackage{slashbox}
+\usepackage{bibentry}
+\usepackage{gensymb}
+\usepackage[]{units}
+%\usepackage{ngerman}
+% ****************************************************************************************************
+
+
+% ********************************************************************
+% Setup, finetuning, and useful commands
+% ********************************************************************
+\newcounter{dummy} % necessary for correct hyperlinks (to index, bib, etc.)
+\newlength{\abcd} % for ab..z string length calculation
+\providecommand{\mLyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+\newcommand{\ie}{i.\,e.}
+\newcommand{\Ie}{I.\,e.}
+\newcommand{\eg}{e.\,g.}
+\newcommand{\Eg}{E.\,g.} 
+% ****************************************************************************************************
+
+
+\usepackage{acronym}
+\usepackage{tabularx} % better tables
+\usepackage{caption}
+\usepackage{enumitem}
+\captionsetup{format=hang,font=small}
+
+\usepackage{graphicx} 
+%here use the citep
+%\usepackage[style=authoryear-comp,firstinits=true,citestyle=authoryear,natbib=true,backend=bibtex]{biblatex}
+\usepackage[style=numeric,backend=biber,maxbibnames=55]{biblatex}
+
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{ifthen}
+\usepackage{textcomp}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[]{units}									
+\usepackage{amsmath}
+\usepackage{subfig}
+\usepackage{epstopdf}
+\usepackage{todonotes}
+\usepackage{inputenc}
+\usepackage{pifont}
+\usepackage{amsfonts}
+%Disable links:
+\usepackage{savesym}
+\savesymbol{pdfbookmark}
+%\usepackage{nohyperref}\restoresymbol{HR}{pdfbookmark}
+\usepackage[hidelinks]{hyperref}
+
+% ****************************************************************************************************
+
+\newcommand\tdsw[1]{\textcolor{red}{#1}}
+
+% ****************************************************************************************************
+% 5. Setup code listings
+% ****************************************************************************************************
+\usepackage{listings} 
+% ****************************************************************************************************    		   
+%hyphen
+% ****************************************************************************************************
+%
+\hyphenation{Vi-deo-strö-me}
+
+\newcommand{\specialcell}[2][c]{%
+	\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+
+
+% ****************************************************************************************************
+% 7. Last calls before the bar closes
+% ****************************************************************************************************
+% ********************************************************************
+% Development Stuff
+% ********************************************************************
+%\PassOptionsToPackage{l2tabu,orthodox,abort}{nag}
+%	\usepackage{nag}
+%\PassOptionsToPackage{warning, all}{onlyamsmath}
+%	\usepackage{onlyamsmath}
+
+% ********************************************************************
+% Last, but not least...
+% ********************************************************************
+\usepackage{classicthesis} 
+\usepackage{mathtools}
+% ****************************************************************************************************
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\itshape}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
+%===============================================================================================================
+% cv
+\usepackage[LabelsAligned,NoDate]{currvita}
+\renewcommand*{\cvheadingfont}{\normalsize}
+\renewcommand*{\cvlistheadingfont}{\normalsize}
+\renewcommand*{\cvlabelfont}{\qquad}
+\AtBeginDocument{\settowidth{\cvlabelwidth}{\cvlabelfont 09/2000--08/2004\,}} 
+
+%===============================================================================================================
+% chapter head
+%\newfont{\chapterNumberX}{pplr9d scaled 6500}% 7500
+%\titleformat{\chapter}[display]%\amquotestring
+% {\relax}{\mbox{}\marginpar{\vspace*{-3.5\baselineskip}\color{halfgray}\chapterNumberX\thechapter}}{0pt}%
+%        {\titlerule\vspace*{.9\baselineskip}\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]%
+
+%===============================================================================================================
+% headers and footers
+\renewcommand{\headfont}{\small} 
+
+%===============================================================================================================
+% nice capital letters for chapter intros
+\usepackage{lettrine}
+\newcommand{\openChapter}[2]{\lettrine[lines=2,lhang=0.05,loversize=0.25]{\textcolor{halfgray}{#1}}{#2}} % halfgray Maroon
+\renewcommand{\LettrineTextFont}{\scshape} % minion sscshape
+
+%===============================================================================================================
+% sideways figures
+\usepackage{rotating} %[counterclockwise]
+
+
+
+
+% CUSTOM CODE
+\newlist{DesignPrinciples}{enumerate}{2}
+\setlist[DesignPrinciples]{label=DP\arabic*.,itemindent=*}
+
+\let\oldtabular\tabular 
+\renewcommand{\tabular}{\scriptsize\centering\oldtabular}
+
+
+\newcommand*{\vcenteredhbox}[1]{\begingroup
+\setbox0=\hbox{#1}\parbox{\wd0}{\box0}\endgroup}
+
+\newcommand{\cmark}{\text{\ding{51}}}
+\newcommand{\xmark}{\text{\ding{55}}}
+
+\algnewcommand\And{\textbf{and}}
+\algnewcommand\Or{\textbf{or}}
+\algnewcommand\eq{=}
+\renewcommand{\algorithmicrequire}{}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+
+% Remove the header and footer for Word
+%\clearscrheadfoot

@@ -1,0 +1,93 @@
+% !TeX spellcheck = de_DE
+%*******************************************************
+% Abstract
+%*******************************************************
+\chapter*{Abstract}
+\thispagestyle{empty}
+	User-generated video has attracted a lot of attention due to the success of Video Sharing Sites such as YouTube and Online Social Networks.
+	Recently, a shift towards live consumption of these videos is observable. The content is captured and instantly shared over the Internet using smart mobile devices such as smartphones.
+	Large-scale platforms arise such as YouTube.Live, YouNow or Facebook.Live which enable the smartphones of users to live-stream to the public.
+	These platforms achieve the distribution of tens of thousands of low resolution videos to remote viewers in parallel.
+	
+	Nonetheless, the providers are not capable to guarantee an efficient collection and distribution of high-quality video streams.
+	As a result, the user experience is often degraded, and the needed infrastructure installments are huge.
+	Efficient methods are required to cope with the increasing demand for these video streams; and an understanding is needed how to capture, process and distribute the videos to guarantee a high-quality experience for viewers.
+	
+	This thesis addresses the quality awareness of user-generated videos by leveraging the concept of content adaptation.
+%	The thesis' understanding of content adaptation is the transformation of a video to the environmental and user's needs.
+%	To address the user's needs the efficiency is represented as the data traffic costs and quality awareness as the perceived quality of a video stream for the user.
+	Two types of content adaptation, the adaptive video streaming and the video composition, are discussed in this thesis.
+	Then, a novel approach for the given scenario of a live upload from mobile devices, the processing of video streams and their distribution is presented.
+	This thesis demonstrates that content adaptation applied to each step of this scenario, ranging from the upload to the consumption, can significantly improve the quality for the viewer.
+	At the same time, if content adaptation is planned wisely, the data traffic can be reduced while keeping the quality for the viewers high.
+	
+	The first contribution of this thesis is a better understanding of the perceived quality in user-generated video and its influencing factors.
+	Subjective studies are performed to understand what affects the human perception, leading to the first of their kind quality models.
+	Developed quality models are used for the second contribution of this work: novel quality assessment algorithms.
+	A unique attribute of these algorithms is the usage of multiple features from different sensors. 
+	Whereas classical video quality assessment algorithms focus on the visual information, the proposed algorithms reduce the runtime by an order of magnitude when using data from other sensors in video capturing devices.
+	Still, the scalability for quality assessment is limited by executing algorithms on a single server. This is solved with the proposed placement and selection component.
+	It allows the distribution of quality assessment tasks to mobile devices and thus increases the scalability of existing approaches by up to 33.71\% when using the resources of only 15 mobile devices.
+	These three contributions are required to provide a real-time understanding of the perceived quality of the video streams produced on mobile devices.
+	
+	The upload of video streams is the fourth contribution of this work. It relies on content and mechanism adaptation.
+	The thesis introduces the first prototypically evaluated adaptive video upload protocol (LiViU) which transcodes multiple video representations in real-time and copes with changing network conditions.
+	In addition, a mechanism adaptation is integrated into LiViU to react to changing application scenarios such as streaming high-quality videos to remote viewers or distributing video with a minimal delay to close-by recipients.
+	
+	A second type of content adaptation is discussed in the fifth contribution of this work. An automatic video composition application is presented which enables live composition from multiple user-generated video streams.
+	The proposed application is the first of its kind, allowing the in-time composition of high-quality video streams by inspecting the quality of individual video streams, recording locations and cinematographic rules.
+	
+	As a last contribution, the content-aware adaptive distribution of video streams to mobile devices is introduced by the Video Adaptation Service (VAS).
+	The VAS analyzes the video content streamed to understand which adaptations are most beneficial for a viewer.
+	It maximizes the perceived quality for each video stream individually and at the same time tries to produce as little data traffic as possible - achieving data traffic reduction of more than 80\%. 
+	
+	 
+\newpage
+
+%===================================================================================================
+%===================================================================================================
+	\cleardoublepage		
+%	\enlargethispage{4cm}
+\chapter*{Kurzfassung}
+	\thispagestyle{empty}
+	Videoportale wie YouTube oder soziale Netzwerke wie Facebook verhalfen nutzergenerierten Videos zu einem enormen Erfolg.
+	Zuletzt ver\"anderte sich jedoch das Produktionsverhalten hin zu einer echtzeitnahen Verbreitung als Live-Videostrom.
+	Dies ist m\"oglich, da Mobilger\"ate in der Lage sind aufgenommene Inhalte instantan an entfernte Betrachter zu verteilen.
+	Heute m\"ussen gro{\ss}e Anbieter wie YouTube.Live, YouNow oder Facebook.Live jene Videostr\"ome an zehntausende Betrachter gleichzeitig verteilen.
+	Dies erreichen sie nur f\"ur geringe Bitraten und Aufl\"osungen.
+	
+	Jene Anbieter sind noch nicht in der Lage die Videostr\"ome hochqualitativ und effizient zu sammeln, zu verarbeiten und zu verteilen.
+	Ein Ergebnis hiervon ist eine vergleichsweise geringe, wahrgenommene Qualit\"at.
+	Effiziente Methoden werden erforderlich, da die aktuellen Kommunikationsnetze mit zunehmender Nutzung der Dienste \"uberlastet sind.
+	
+	In dieser Thesis wird das Konzept der Inhaltsadaption als eine L\"osung zur effizienten und qualit\"atssensitiven Sammlung, Verarbeitung und Verteilung nutzergenerierter Video-str\"ome diskutiert.
+%	Hierbei versteht diese Arbeit Inhaltsadaption als die Transformation von Video entsprechend der gegebenen Umweltbedingungen und Nutzeranforderungen.
+%	Die Nutzeranforderungen werden hierbei simplifiziert als wahrgenommene Qualit\"at des Videostroms und den verursachten Datenverkehrs als Kosten betrachtet.
+	Zwei Formen der Inhaltsadaption sind hierbei im Fokus der Arbeit: adaptives Videostreaming und Videokomposition.
+	Beide Konzepte werden an verschiedenen Stellen des Videoproduktions- und Videoverteilungsprozesses angesiedelt um die wahrgenommene Qualit\"at der Videostr\"ome zu verbessern und den verursachten Datenverkehr zu verringern.
+	Dabei werden die Adaptionen stets wohl\"uberlegt und geleitet durch die f\"ur den Betrachter eines Videostroms wahrnehmbare Qualit\"at gesteuert.
+	
+	Der erste Beitrag dieser Thesis ist ein besseres Verst\"andnis was wahrgenommene Qualit\"at bei nutzergenerierten Videos bedeutet und welche Faktoren diese beeinflussen.
+	Hierf\"ur werden in Nutzerstudien Qualit\"atsmodelle erstellt, die in dieser Form einzigartig sind.
+	Jene Qualit\"atsmodelle erlauben den Entwurf neuartiger Qualit\"atsberechnungsalgorithmen. %, die die wahrgenommene Qualit\"at pr\"azise bestimmen.
+	Gleichzeitig nutzen jene Algorithmen nicht ausschlie{\ss}lich visuelle Daten zur Berechnung, sondern vor allem Kontextinformationen.
+	Dies ermöglicht eine signifikante Beschleunigung der Verarbeitung und damit eine f\"ur Live-Videostr\"ome notwendige echtzeitnahe Berechnung der Qualit\"at erm\"oglicht.
+	Der dritte Beitrag dieser Thesis ist eine Komponente zur Erh\"ohung der Skalierbarkeit der Qualit\"atsberechnung durch die Nutzung von station\"aren und mobilen Rechenkapazit\"aten.
+	Jene Selektions- und Platzierungskomponente erlaubt die Bestimmung des besten Qualit\"atsberechnungsalgorithmus und dessen Ausf\"uhrungslokation.
+	Hierbei wird eine Erh\"ohung der Skalierbarkeit um bis zu einem Drittel erreicht, wenn die Ressourcen von 15 mobilen Endger\"aten genutzt werden.
+	Jene drei Beitr\"age erlauben die f\"ur die restliche Arbeit so wichtige echtzeitnahe Qualit\"atsberechnung.
+
+	Die Bereitstellung der Videostr\"ome ist der vierte Beitrag dieser Arbeit. Jene Bereitstellung nutzt Inhaltsadaption um sich an ver\"andernde Netzwerkbedingungen anzupassen und ferner Applikationsanforderungen oder Szenarienwechsel zu erm\"oglichen.
+	Hierbei wird eine Form der Inhaltsadaption  gew\"ahlt, die es auf Mobilger\"aten erm\"oglicht verschiedene Repr\"asentationen desselben Videos zu enkodieren und in Echtzeit zwischen diesen zu wechseln. 
+	Hiermit kann zum einen eine echtzeitnahe Bereitstellung von Videoinhalten erm\"oglicht werden, aber auch ein hochqualitativer Videostrom mit gr\"o{\ss}erer Latenz an entfernte Nutzer verteilt werden.
+	
+	Die zweite Form und damit der f\"unfte Beitrag dieser Thesis ist die Videokomposition.
+	Hierzu wird ein neuartiger, automatischer Videokompositionsalgorithmus f\"ur nutzergenerierte Live-Videostr\"ome vorgeschlagen, der Kompositionsregeln von manueller Komposition lernt.
+	Der vorgeschlagene Algorithmus ist der erste seiner Art, der echtzeitnahen Komposition einer Vielzahl an Videostr\"omen erlaubt und dabei Kriterien wie Videoqualit\"at, -inhalt und kinematographische Regeln beachtet.
+
+	Der letzte Beitrag dieser Arbeit adressiert die Verteilung von Videostr\"omen durch den Einsatz einer inhaltsabh\"angigen, adaptiven Videoverteilung.
+	Das vorgeschlagene System untersucht die zu verteilenden Videoinhalte hinsichtlich ihrer verschiedenen Repr\"asentationen und schl\"agt Adaptionen vor, die vorteilhaft f\"ur den Nutzer sind.
+	Dabei zielt das System auf eine hohe, wahrgenommene Qualit\"at bei gleichzeitiger Datenverkehrsreduktion ab.
+	Das System erlaubt eine Datenverkehrsreduktion von \"uber 80\%.
+\endinput
+%===================================================================================================

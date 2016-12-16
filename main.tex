@@ -1,0 +1,71 @@
+\documentclass[twoside,openright,titlepage,fleqn,%1headlines,% 
+                numbers=noenddot,BCOR5mm,headinclude,%footinclude,%
+                11pt,a4paper,cleardoublepage=empty,abstractoff % <--- obsolete, remove (todo) a4paper
+                ]{scrreprt}
+
+%********************************************************************
+% Note: Make all your adjustments in here
+%*******************************************************
+\input{classicthesis-config}
+\input{phd}		
+\addbibresource{Bibliography.bib}
+	
+\usepackage[left=1.1in,right=1.1in,top=0.8in,bottom=1.2in]{geometry}			
+%********************************************************************
+% Hyphenation
+%*******************************************************
+%\hyphenation{put special hyphenation here}
+% ********************************************************************
+%*******************************************************
+\begin{document}
+\frenchspacing
+\raggedbottom
+\selectlanguage{american} % american ngerman
+\pagenumbering{roman}
+\pagestyle{empty} % plain empty
+
+
+%********************************************************************
+% Frontmatter
+%*******************************************************
+\include{FrontBackmatter/Titlepage}
+    
+\cleardoublepage\include{FrontBackmatter/Abstract}
+%\cleardoublepage\include{FrontBackmatter/Acknowledgments} 
+\pagestyle{scrheadings}
+\cleardoublepage\include{FrontBackmatter/Contents}
+%********************************************************************
+% Mainmatter
+%*******************************************************
+\cleardoublepage
+\pagenumbering{arabic}
+\cleardoublepage\include{Chapters/01_Introduction/100_Introduction}
+\cleardoublepage\include{Chapters/02_Background/200_Background}
+\cleardoublepage\include{Chapters/04_RecordingQuality/400_RecordingQuality}
+\cleardoublepage\include{Chapters/05b_Quality/550_QualityAssessment}
+\cleardoublepage\include{Chapters/05_MobileUpload/500_MobileUpload}
+\cleardoublepage\include{Chapters/06_VideoComposition/600_VideoComposition}
+\cleardoublepage\include{Chapters/07_VAS/700_VAS}
+\cleardoublepage\include{Chapters/10_Conclusion/1000_Conclusions}
+
+
+
+
+\cleardoublepage\include{FrontBackmatter/Bibliography}
+\cleardoublepage\include{FrontBackmatter/ContentsBack} 
+
+
+% ********************************************************************
+% Appendix
+%*******************************************************
+\appendix
+\cleardoublepage\include{FrontBackmatter/Appendix}
+\cleardoublepage\include{FrontBackmatter/Publications}
+\cleardoublepage\include{FrontBackmatter/CurriculumVitae}
+\cleardoublepage\include{FrontBackmatter/Declaration}            
+%\include{FrontBackmatter/Colophon}
+%\printinunitsof{in}\prntlen{\textwidth}
+\end{document}
+% ********************************************************************
+% ********************************************************************
+% ********************************************************************
